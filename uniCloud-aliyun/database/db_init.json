@@ -1,0 +1,24 @@
+// 在本文件中可配置云数据库初始化，数据格式见：https://uniapp.dcloud.io/uniCloud/hellodb?id=db-init
+// 编写完毕后对本文件点右键，可按配置规则创建表和添加数据
+{// 用户系统
+"admin": {
+		"data": [ // 数据
+			{
+				"password": "123456",
+				"username": "admin",
+				"creattime": 1591530730926,
+				"status": "管理员"
+			}
+		],
+		"index": [{ // 索引
+			"IndexName": "username", // 索引名称
+			"MgoKeySchema": { // 索引规则
+				"MgoIndexKeys": [{
+					"Name": "username", // 索引字段
+					"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序
+				}],
+				"MgoIsUnique": true // 索引是否唯一
+			}
+		}]
+	}
+}
