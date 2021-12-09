@@ -68,5 +68,13 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "h5" : {
+        "router" : {
+            "base" : "/wui-desktop"
+        },
+        "devServer" : {
+            "https" : true
+        }
+    }
 }
