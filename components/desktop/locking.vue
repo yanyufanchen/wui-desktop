@@ -5,7 +5,6 @@
 				<i class="el-icon-user-solid"></i>
 			</div>
 			<el-input style="width:300px" placeholder="请输入密码" v-model="password" show-password></el-input>
-			<!-- <div class="hint">请输入密码</div> -->
 			<el-button type="primary" round @click="unlocking" style="width:200px;margin-top:20px">解除锁定</el-button>
 		</div>
 	</div>
