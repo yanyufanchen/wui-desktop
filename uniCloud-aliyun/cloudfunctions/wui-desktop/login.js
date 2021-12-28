@@ -1,13 +1,13 @@
+
 // 登录
 exports.login = async (db, event, context) => {
-	const collection = db.collection('admin')
+	const collection = db.collection('users')
 	var res = await collection.where({
 		username: event.username
 	}).get()
-	console.log(res,'登录')
 	if (res.affectedDocs < 1) {
 		return {
-			statu: false,
+			status: false,
 			mes: '账号或密码错误'
 		}
 	}
@@ -32,7 +32,7 @@ exports.login = async (db, event, context) => {
 	}
 	const token = randomString(32)
 	return {
-		statu: true,
+		status: true,
 		mes: '登录成功',
 		data: {
 			_id: user._id,
@@ -44,17 +44,17 @@ exports.login = async (db, event, context) => {
 }
 // 新增账户
 exports.addAccount = async (db, event, context) => {
-	const collection = db.collection('admin')
+	const collection = db.collection('users')
 	var res = await collection.add(event)
 	
 	return {
-		statu: true,
+		status: true,
 		mes: '新增成功'
 	}
 }
 // 查询账户
 exports.getAccountList = async (db, event, context) => {
-	const collection = db.collection('admin')
+	const collection = db.collection('users')
 	var res = await collection.field({
 		'password': false
 	}).get()
@@ -65,23 +65,41 @@ exports.getAccountList = async (db, event, context) => {
 		data: res.data
 	}
 }
+// 验证账户
+exports.checkAccountList = async (db, event, context) => {
+	const collection = db.collection('users')
+	var res = await collection.where({
+		username:event.username
+	}).get()
+	var user = res.data[0]
+	if (user.password !== event.password) {
+		return {
+			status: false,
+			mes: '密码错误'
+		}
+	}
+	return {
+		status: true,
+		mes: '验证成功',
+		data: null
+	}
+}
 // 修改账户
 exports.updateAccount = async (db, event, context) => {
-	const collection = db.collection('admin')
+	const collection = db.collection('users')
 	var res = await collection.doc(event.id).update(event.data)
-	
 	return {
-		statu: true,
+		status: true,
 		mes: '修改成功'
 	}
 }
 // 删除账户
 exports.removeAccount = async (db, event, context) => {
-	const collection = db.collection('admin')
+	const collection = db.collection('users')
 	var res = await collection.doc(event.id).remove()
 	
 	return {
-		statu: true,
+		status: true,
 		mes: '删除成功'
 	}
 }

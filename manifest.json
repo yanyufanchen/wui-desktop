@@ -75,6 +75,13 @@
         },
         "devServer" : {
             "https" : true
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "google" : {
+                    "key" : ""
+                }
+            }
         }
     }
 }

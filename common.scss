@@ -1,0 +1,63 @@
+.flex {
+	display: flex;
+}
+// 水平 中 中
+.XcenterYcenter {
+	justify-content: center;
+	align-items: center;
+}
+// 水平 左右 中
+.XspaceBYcenter {
+	justify-content: space-between;
+	align-items: center;
+}
+// 水平 左 中
+.XleftYcenter {
+	justify-content: flex-start;
+	align-items: center;
+}
+// 水平 中 上
+// 水平 中 下
+
+// 水平 左 上
+// 水平 左 下
+// 水平 右 中
+// 水平 右 上
+// 水平 右 下
+
+// 垂直 中 中
+.YcenterXcenter {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+// elment组件
+// 底部栏左侧
+.el-popover {
+		background: none!important;
+	}
+.popper-lowerMenu{
+	left: 0!important;
+	padding: 0!important;
+	box-shadow:none!important;
+	border: none!important;
+	margin-bottom: 0!important;
+}
+// 底部栏右侧
+.popper-lowerDate{
+	right: 0px!important;
+	padding: 0!important;
+	box-shadow:none!important;
+	border: none!important;
+	margin-bottom: 0!important;
+}
+.popper-lowerMenu-userSelect {
+	padding: 0!important;
+	box-shadow:none!important;
+	border: none!important;
+	margin-bottom: 0!important;
+}
+.wui-icon:hover {
+	background-color: rgba(255, 255, 255, 0.15) !important;
+}

@@ -62,4 +62,27 @@ export default class Utils {
 
 		})
 	}
+	// this.desktops 
+	static setModalHide(that,active){
+		// 设置当前弹窗显影
+		let desktops = that.Web_api.clone(that.desktops)
+		let maxIndex = that.Web_api.getArrMaxValue(desktops.wuiModals, 'zIndex') + 1
+		desktops.wuiModals.forEach(item => {
+			if (item.id === active.id) {
+				item.show_flag = !item.show_flag
+			}
+		})
+		let newwuiModals = desktops.wuiModals.filter(item => item.show_flag === true)
+		// 折叠的是最后一个 就让第一个高亮
+		if (newwuiModals.length == 0) {
+			that.$store.commit('setDesktop', desktops);
+			return
+		}
+		if (desktops.wuiModals[desktops.wuiModals.length - 1].id === active.id) {
+			newwuiModals[0].zIndex = maxIndex
+		} else {
+			newwuiModals[newwuiModals.length - 1].zIndex = maxIndex
+		}
+		that.$store.commit('setDesktop', desktops);
+	}
 }

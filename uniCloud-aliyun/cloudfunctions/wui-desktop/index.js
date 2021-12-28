@@ -8,6 +8,9 @@ exports.main = async (event, context) => {
 	if (event.model == 'login') { // 登录-
 		return await login.login(db, event.event, context)
 	}
+	if (event.model == 'checkAccountList') { // 锁定 验证
+		return await login.checkAccountList(db, event.event, context)
+	}
 	//返回数据给客户端
 	// return event
 };
