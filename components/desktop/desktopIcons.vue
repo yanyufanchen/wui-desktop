@@ -1,6 +1,6 @@
 <template>
-	<div class="desktopIcons" :style="{'backgroundImage':`url(${systems.wallpaper})`}">
-		<div class="shortcut flex YcenterXcenter" v-for="item in desktops.shortcutList" :key="item.id"
+	<div class="desktopIcons" :style="{'backgroundImage':`url(${systems.wallpapers.find(item=>item.id===systems.wallpaper).url})`}">
+		<div class="shortcut flex YcenterXcenter" v-for="item in user.shortcutList" :key="item.id"
 			 @dblclick="openModal(item)">
 			<div class="icon" :style="{'backgroundColor':item.backgroundColor}">
 				<i class="fa fa-lg" :class="item.icon"></i>
@@ -19,7 +19,7 @@
 			return {};
 		},
 		computed: {
-			...mapState(['desktops','systems'])
+			...mapState(['user','systems'])
 		},
 		components: {
 
@@ -28,26 +28,23 @@
 		methods: {
 			// 打开应用
 			openModal(active) {
-				console.log(active,'active')
-				
 				// 检索是否有该应用 有(显示) 无(添加)
-				let desktops=this.Web_api.clone(this.desktops)
-				let activeApp=desktops.wuiModals.find(item=>item.app_id==active.app_id)
-
+				let user=this.Web_api.clone(this.user)
+				let activeApp=user.wuiModals.find(item=>item.app_id==active.app_id)
 				if(activeApp){
-					activeApp.show_flag=true
+					// 置顶显示
+					this.Utils.setModalTop(this, activeApp)
 					
 				}else{
-					desktops.wuiModals.push({
-						id:desktops.wuiModals.length-1+1,
+					user.wuiModals.push({
+						id:user.wuiModals.length+1,
 						app_id:active.app_id,
 						show_flag:true,
-						zIndex:this.Web_api.getArrMaxValue(desktops.wuiModals,'zIndex')+1,
+						zIndex:this.Web_api.getArrMaxValue(user.wuiModals,'zIndex')+1,
 						data:{}
 					})
+					this.$store.dispatch('setUserApi',user)
 				}
-				// console.log(desktops.wuiModals,'111')
-				this.$store.commit('setDesktop', desktops);
 			}
 		}
 	};

@@ -39,8 +39,9 @@
 					return
 				}
 				const res = await this.Api.sendUniCloud(this, {
-					model: 'checkAccountList',
+					model: 'checkAccount',
 					event: {
+						token:uni.getStorageSync('token'),
 						username: this.user.username,
 						password: this.password,
 					}

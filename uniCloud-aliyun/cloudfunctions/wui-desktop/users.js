@@ -1,5 +1,4 @@
-
-// 登录
+// 登录--
 exports.login = async (db, event, context) => {
 	const collection = db.collection('users')
 	var res = await collection.where({
@@ -12,7 +11,7 @@ exports.login = async (db, event, context) => {
 		}
 	}
 	var user = res.data[0]
-	
+
 	if (user.password !== event.password) {
 		return {
 			status: false,
@@ -31,22 +30,47 @@ exports.login = async (db, event, context) => {
 		return pwd;
 	}
 	const token = randomString(32)
+	// 写入token
+	var res = await collection.doc(user._id).update({
+		token
+	})
+	// 过滤密码
+	let {
+		password,
+		userObj
+	} = user
 	return {
 		status: true,
 		mes: '登录成功',
 		data: {
-			_id: user._id,
-			username: user.username,
-			token: token,
-			status: user.status
+			// ...userObj,
+			token
 		}
+	}
+}
+exports.checkToken = async (db, event, context) => {
+	const collection = db.collection('users')
+	var res = await collection.where({
+		token: event.token
+	}).get()
+	if (res.data.length == 0) {
+		return {
+			status: false,
+			code:401,
+			mes: '验证失败'
+		}
+	}
+	return {
+		status: true,
+		code:200,
+		mes: '验证成功'
 	}
 }
 // 新增账户
 exports.addAccount = async (db, event, context) => {
 	const collection = db.collection('users')
 	var res = await collection.add(event)
-	
+
 	return {
 		status: true,
 		mes: '新增成功'
@@ -56,20 +80,37 @@ exports.addAccount = async (db, event, context) => {
 exports.getAccountList = async (db, event, context) => {
 	const collection = db.collection('users')
 	var res = await collection.field({
-		'password': false
+		'password': false,
+		'token': false
 	}).get()
-	
+
 	return {
-		statu: true,
+		status: true,
 		mes: '查询成功',
 		data: res.data
 	}
 }
-// 验证账户
-exports.checkAccountList = async (db, event, context) => {
+// 查询账户详情
+exports.getAccountDetail = async (db, event, context) => {
+	const collection = db.collection('users')
+	var res = await collection.field({
+		'password': false,
+		'token': false
+	}).where({
+		token: event.token
+	}).get()
+
+	return {
+		status: true,
+		mes: '查询成功',
+		data: res.data
+	}
+}
+// 验证账户--
+exports.checkAccount = async (db, event, context) => {
 	const collection = db.collection('users')
 	var res = await collection.where({
-		username:event.username
+		username: event.username
 	}).get()
 	var user = res.data[0]
 	if (user.password !== event.password) {
@@ -87,7 +128,9 @@ exports.checkAccountList = async (db, event, context) => {
 // 修改账户
 exports.updateAccount = async (db, event, context) => {
 	const collection = db.collection('users')
-	var res = await collection.doc(event.id).update(event.data)
+	var res = await collection.where({
+		token: event.token
+	}).update(event.data)
 	return {
 		status: true,
 		mes: '修改成功'
@@ -97,7 +140,7 @@ exports.updateAccount = async (db, event, context) => {
 exports.removeAccount = async (db, event, context) => {
 	const collection = db.collection('users')
 	var res = await collection.doc(event.id).remove()
-	
+
 	return {
 		status: true,
 		mes: '删除成功'

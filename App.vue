@@ -13,10 +13,10 @@
 		methods:{
 			routerGuard(){
 				let url = window.location.href;
-				const user = uni.getStorageSync('user');
-				if(user&&user.token){
+				const token = uni.getStorageSync('token');
+				if(token){
 					console.log('已登录')
-					this.$store.commit('setUser', user);
+					// this.$store.commit('setUser', user);
 					if(url.indexOf('login')){
 						uni.redirectTo({
 							url: "/pages/home/index"

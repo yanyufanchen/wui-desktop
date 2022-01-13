@@ -7,14 +7,14 @@
 		'width':`${width}px`,'height':`${height}px`,
 		'zIndex':`${zIndex}`,'boxShadow': `0px 1px 3px 1px ${systems.color}`}">
 		<div class="goinvoice_header flex XspaceBYcenter" @mousedown.stop="mousedown($event)"
-			:style="{'backgroundColor':systems.color,'opacity': options.index==desktops.wuiModals.length-1?1:0.9}"
+			:style="{'backgroundColor':systems.color,'opacity': zIndex==Web_api.getArrMaxValue(user.wuiModals, 'zIndex')?1:0.9}"
 			ref="goinvoice_header">
 			<div class="left flex XcenterYcenter">
 				<div class="icon flex XcenterYcenter"
-					:style="{'backgroundColor':stores.appList.find(item=>item.app_id==options.item.app_id).backgroundColor}">
-					<i class="fa fa-lg" :class="stores.appList.find(item=>item.app_id==options.item.app_id).icon"></i>
+					:style="{'backgroundColor':stores.find(item=>item.app_id==options.item.app_id).backgroundColor}">
+					<i class="fa fa-lg" :class="stores.find(item=>item.app_id==options.item.app_id).icon"></i>
 				</div>
-				<div class="title">{{stores.appList.find(item=>item.app_id==options.item.app_id).title}}</div>
+				<div class="title">{{stores.find(item=>item.app_id==options.item.app_id).title}}</div>
 			</div>
 			<div class="right">
 				<i class="el-icon-minus tool wui-icon" style="font-size: 14px;" @click.stop="selectTools(1)"></i>
@@ -24,7 +24,9 @@
 			</div>
 		</div>
 		<div class="main">
-			{{stores.appList.find(item=>item.app_id==options.item.app_id).title}}
+			<browser v-if="options.item.app_id==='wui-browser'" :options="options" />
+			<computer v-else-if="options.item.app_id==='wui-my-computer'" :options="options" />
+			<appStore v-else-if="options.item.app_id==='wui-app-store'" :options="options" />
 		</div>
 	</div>
 </template>
@@ -33,6 +35,9 @@
 	import {
 		mapState
 	} from 'vuex';
+	import browser from '@/components/modalContent/browser.vue'
+	import computer from '@/components/modalContent/computer.vue'
+	import appStore from '@/components/modalContent/appStore.vue'
 	export default {
 		name: 'wuimodal', // 应用弹框
 		data() {
@@ -51,10 +56,12 @@
 			zIndex: 0
 		},
 		computed: {
-			...mapState(['systems', 'stores', 'desktops'])
+			...mapState(['systems', 'stores', 'user'])
 		},
 		components: {
-
+			browser,
+			computer,
+			appStore
 		},
 		mounted() {
 			this.setModalSize()
@@ -67,15 +74,18 @@
 			// 点击当前窗口
 			selectModal() {
 				// 点击,将当前项排到最后一位，目的是置顶
-				let desktops = this.Web_api.clone(this.desktops)
-				let maxIndex = this.Web_api.getArrMaxValue(desktops.wuiModals, 'zIndex') + 1
-				desktops.wuiModals.forEach(item => {
+				let user = this.Web_api.clone(this.user)
+				let maxIndex = this.Web_api.getArrMaxValue(user.wuiModals, 'zIndex')
+				let active=user.wuiModals.find(item=>item.zIndex===maxIndex)
+				// 如果点击的是最顶层,就不执行
+				if(this.options.item.app_id===active.app_id)return
+				user.wuiModals.forEach(item => {
 					if (item.id === this.options.item.id) {
-						item.zIndex = maxIndex
+						item.zIndex = maxIndex+1
 					}
 				})
 				// 写入vuex
-				this.$store.commit('setDesktop', desktops);
+				this.$store.dispatch('setUserApi', user);
 			},
 			// 移动窗口
 			mousedown(e) {
@@ -113,41 +123,19 @@
 					this.setModalSize()
 				}
 				if (type === 3) { // 关闭
-				let desktops = this.Web_api.clone(this.desktops)
-					desktops.wuiModals= desktops.wuiModals.filter(item => item.id !== this.options.item.id)
-					this.$store.commit('setDesktop', desktops);
+				let user = this.Web_api.clone(this.user)
+					user.wuiModals= user.wuiModals.filter(item => item.id !== this.options.item.id)
+					this.$store.commit('updateUser', user);
 				}
 			},
-			// 设置窗口隐藏
-			// setModalHide(){
-			// 	// 设置当前弹窗显影
-			// 	let desktops = this.Web_api.clone(this.desktops)
-			// 	let maxIndex = this.Web_api.getArrMaxValue(desktops.wuiModals, 'zIndex') + 1
-			// 	desktops.wuiModals.forEach(item => {
-			// 		if (item.id === this.options.item.id) {
-			// 			item.show_flag = false
-			// 		}
-			// 	})
-			// 	let newwuiModals = desktops.wuiModals.filter(item => item.show_flag === true)
-			// 	// 折叠的是最后一个 就让第一个高亮
-			// 	if (newwuiModals.length == 0) {
-			// 		this.$store.commit('setDesktop', desktops);
-			// 		return
-			// 	}
-			// 	if (desktops.wuiModals[desktops.wuiModals.length - 1].id === this.options.item.id) {
-			// 		newwuiModals[0].zIndex = maxIndex
-			// 	} else {
-			// 		newwuiModals[newwuiModals.length - 1].zIndex = maxIndex
-			// 	}
-			// 	this.$store.commit('setDesktop', desktops);
-			// },
+			
 			// 设置窗口大小
 			setModalSize() {
 				// 判断是否是自定义大小
-				if (this.stores.appList.find(item => item.app_id == this.options.item.app_id).customSize && this.size !==
+				if (this.stores.find(item => item.app_id == this.options.item.app_id).customSize && this.size !==
 					1) { // 自定义大小
-					this.width = this.stores.appList.find(item => item.app_id == this.options.item.app_id).style.width
-					this.height = this.stores.appList.find(item => item.app_id == this.options.item.app_id).style.height
+					this.width = this.stores.find(item => item.app_id == this.options.item.app_id).style.width
+					this.height = this.stores.find(item => item.app_id == this.options.item.app_id).style.height
 				} else {
 					this.width = document.body.clientWidth * this.size
 					this.height = (document.body.clientHeight - 40) * this.size
@@ -226,10 +214,10 @@
 
 		.main {
 			position: absolute;
-			top: 50px;
+			top: 43px;
 			left: 0;
 			width: 100%;
-			height: 50px;
+			height: calc(100% - 44px);
 			background-color: #fff;
 		}
 

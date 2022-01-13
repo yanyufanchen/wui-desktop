@@ -1,7 +1,7 @@
 {
-    "name" : "desktop",
+    "name" : "WUI云桌面",
     "appid" : "__UNI__B1249B1",
-    "description" : "",
+    "description" : "采用uniapp开发的个人云桌面，vue框架，unicloud云数据库，个人博客项目，大前端全栈开发项目",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -71,17 +71,19 @@
     "vueVersion" : "2",
     "h5" : {
         "router" : {
-            "base" : "/wui-desktop"
+            "base" : "/wui-desktop",
+            "mode" : "hash"
         },
         "devServer" : {
             "https" : true
         },
         "sdkConfigs" : {
-            "maps" : {
-                "google" : {
-                    "key" : ""
-                }
-            }
+            "maps" : {}
+        },
+        "title" : "WUI云桌面",
+        "template" : "index.html",
+        "uniStatistics" : {
+            "enable" : true
         }
     }
 }

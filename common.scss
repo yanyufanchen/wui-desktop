@@ -31,7 +31,25 @@
 	justify-content: center;
 	align-items: center;
 }
-
+// 垂直  上 中
+.YtopXcenter {
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+// 公共样式
+.text_hide {
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow: ellipsis;
+}
+.p_hide{position: relative; line-height: 20px; max-height: 40px;overflow: hidden;}
+.p_hide::after{content: "..."; position: absolute; bottom: 0; right: 0; padding-left: 40px;
+// background: -webkit-linear-gradient(left, transparent, #fff 55%);
+// background: -o-linear-gradient(right, transparent, #fff 55%);
+// background: -moz-linear-gradient(right, transparent, #fff 55%);
+// background: linear-gradient(to right, transparent, #fff 55%);
+}
 // elment组件
 // 底部栏左侧
 .el-popover {
@@ -60,4 +78,27 @@
 }
 .wui-icon:hover {
 	background-color: rgba(255, 255, 255, 0.15) !important;
+}
+// 浏览器
+.el-tabs__header {
+	padding-right: 10px!important;
+	background: #cccccc29;
+	.el-icon-plus {
+		color: #3a8ee6;;
+	}
+}
+.el-tabs__new-tab {
+	border: 1px solid #3a8ee6;
+}
+.el-tabs--border-card {
+	height: 100%;
+}
+.el-tabs__content {
+	padding: 0!important;
+	margin: 0;
+	width: 100%;
+	height: calc(100% - 40px);
+}
+.el-tab-pane {
+	height: 100%;
 }

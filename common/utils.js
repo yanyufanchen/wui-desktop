@@ -55,34 +55,46 @@ export default class Utils {
 		return new Promise((resolve, reject) => {
 			if (!app) {
 				getApp().globalData.AppCallback = async (flag) => {
-					// console.log(flag,'回调')
 					resolve(flag)
 				}
 			}
 
 		})
 	}
-	// this.desktops 
+	// 隐藏当前弹窗
 	static setModalHide(that,active){
 		// 设置当前弹窗显影
-		let desktops = that.Web_api.clone(that.desktops)
-		let maxIndex = that.Web_api.getArrMaxValue(desktops.wuiModals, 'zIndex') + 1
-		desktops.wuiModals.forEach(item => {
+		let user = that.Web_api.clone(that.user)
+		let maxIndex = that.Web_api.getArrMaxValue(user.wuiModals, 'zIndex') + 1
+		user.wuiModals.forEach(item => {
 			if (item.id === active.id) {
 				item.show_flag = !item.show_flag
 			}
 		})
-		let newwuiModals = desktops.wuiModals.filter(item => item.show_flag === true)
+		let newwuiModals = user.wuiModals.filter(item => item.show_flag === true)
 		// 折叠的是最后一个 就让第一个高亮
 		if (newwuiModals.length == 0) {
-			that.$store.commit('setDesktop', desktops);
+			that.$store.dispatch('setUserApi',user)
 			return
 		}
-		if (desktops.wuiModals[desktops.wuiModals.length - 1].id === active.id) {
+		if (user.wuiModals[user.wuiModals.length - 1].id === active.id) {
 			newwuiModals[0].zIndex = maxIndex
 		} else {
 			newwuiModals[newwuiModals.length - 1].zIndex = maxIndex
 		}
-		that.$store.commit('setDesktop', desktops);
+		that.$store.dispatch('setUserApi',user)
+	}
+	// 置顶当前弹窗
+	static setModalTop(that,active){
+		let user = that.Web_api.clone(that.user)
+		let maxIndex = that.Web_api.getArrMaxValue(user.wuiModals, 'zIndex') + 1
+		user.wuiModals.forEach(item => {
+			if (item.id === active.id) {
+				item.zIndex = maxIndex + 1
+				item.show_flag = true
+			}
+		})
+		// 写入vuex
+		that.$store.dispatch('setUserApi',user)
 	}
 }

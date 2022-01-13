@@ -13,10 +13,21 @@ export default class Api {
 		}
 		
 		return new Promise((resolve,reject)=>{
+			let timeer=null
 			uniCloud.callFunction({
 				name: path,
 				data: data
 			}).then((res) => {
+				if(res.result.code&&res.result.code==401){
+						that.$message.error('token失效，立即前往登录页面')
+						timeer=setTimeout(()=>{
+							// 前往登录页面
+							uni.redirectTo({
+								url: "/pages/home/login"
+							});
+						},500)
+						return
+				}
 				if(flag){
 					that.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
 					  // loadingInstance.close();
@@ -26,7 +37,7 @@ export default class Api {
 			}).catch((err)=>{
 				console.log(err,'请求云函数错误')
 				that.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
-				  loadingInstance.close();
+				  // loadingInstance.close();
 				});
 				resolve({
 					statu: false,
@@ -35,6 +46,29 @@ export default class Api {
 			})
 		})
 		
+	}
+	// 上传云存储
+	 static async uploadFileCloud(file){
+		console.log(file,'上传服务器')
+		if(file.size>10*1000*1000){
+			this.$message.error('文件超出10M')
+			return
+		}
+		const result = await uniCloud.uploadFile({
+			filePath: file.url,
+			cloudPath: file.name,
+			onUploadProgress: function(progressEvent) {
+				console.log(progressEvent);
+				var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+			}
+		});
+		console.log(result, '上传');
+		if (!result.success) {
+			console.log('上传失败');
+			return;
+		}
+		this.fileImg = result.fileID;
+		console.log(this.fileImg,'确定上传');
 	}
 	static Toast(message,type='success',that){
 		that.$message({

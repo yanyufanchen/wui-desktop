@@ -1,24 +1,126 @@
-// 在本文件中可配置云数据库初始化，数据格式见：https://uniapp.dcloud.io/uniCloud/hellodb?id=db-init
-// 编写完毕后对本文件点右键，可按配置规则创建表和添加数据
-{// 用户系统
-"users": {
+// 在本文件中可配置云数据库初始化，数据格式见：https://uniapp.dcloud.io/uniCloud/hellodb?id=db-init
+
+// 编写完毕后对本文件点右键，可按配置规则创建表和添加数据
+
+{
+	// 用户系统
+	"users": {
 		"data": [ // 数据
-			{
+			{	
 				"password": "123456",
 				"username": "admin",
-				"creattime": 1591530730926,
-				"status": "管理员"
-			}
-		],
-		"index": [{ // 索引
-			"IndexName": "username", // 索引名称
-			"MgoKeySchema": { // 索引规则
-				"MgoIndexKeys": [{
-					"Name": "username", // 索引字段
-					"Direction": "1" // 索引方向，1：ASC-升序，-1：DESC-降序
+				"token":"xxx",
+				"creattime": "Fri Jan 07 2022 17:50:00 GMT+0800 (中国标准时间)",
+				"status": "管理员",
+				"myappList": [{
+					"id": 1,
+					"app_id": "wui-my-computer",
+					"data": {
+
+					}
+				}, {
+					"id": 2,
+					"app_id": "wui-browser",
+					"data": {
+						"list": [{
+							"id": 1,
+							"name": "搜狗搜索",
+							"url": "https://www.sogou.com/",
+							"show": true
+						}]
+					}
+				}, {
+					"id": 3,
+					"app_id": "wui-app-store",
+					"data": {}
+				}], // 我的应用
+				"lowerMenu": [], // 左下角菜单
+				"shortcutList": ["wui-my-computer", "wui-app-store", "wui-browser"], // 配置我的桌面快捷应用列表
+				"wuiModals": [{
+					"id": 0,
+					"app_id": "wui-my-computer",
+					"show_flag": true,
+					"zIndex": 2
+				}, {
+					"id": 1,
+					"app_id": "wui-browser",
+					"show_flag": true,
+					"zIndex": 1
+				}, {
+					"id": 2,
+					"app_id": "wui-app-store",
+					"show_flag": true,
+					"zIndex": 3
 				}],
-				"MgoIsUnique": true // 索引是否唯一
+				"systemData":{
+					"color": "#14173a", // 主题颜色
+					"wallpapers": [], // 壁纸库
+					"wallpaper": 1 // 壁纸序号
+				}
 			}
+		]
+	},
+	// 系统默认设置  
+	"systemData": {
+		"data": [{
+			"color": "#14173a", // 主题颜色
+			"wallpapers": [{
+				"id": 1,
+				"url": "./static/medias/desktop/3.jpg"
+			}], // 壁纸库
+			"wallpaper": 1 // 壁纸序号
 		}]
-	}
-}
+	},
+	// 应用商店系统
+	"systemStores": {
+		"data": [ // 数据
+			{	
+				"app_id": "wui-my-computer",
+				"title": "我的电脑",
+				"icon": "fa fa-desktop",
+				"customSize": false,
+				"backgroundColor": "rgb(194, 187, 183，0.3)",
+				"type": "systemApp",
+				"style": {},
+				"default": {}
+			},
+			{
+				"app_id": "wui-app-store",
+				"title": "应用商店",
+				"customSize": false,
+				"icon": "fa fa-shopping-bag",
+				"backgroundColor": "rgb(179, 106, 186)",
+				"type": "systemApp",
+				"style": {},
+				"default": {}
+			},
+			{
+				"app_id": "wui-browser",
+				"title": "浏览器",
+				"customSize": false,
+				"icon": "fa fa-internet-explorer",
+				"backgroundColor": "rgb(58, 85, 194)",
+				"type": "systemApp",
+				"style": {},
+				"default": {
+					"name": "搜狗搜索",
+					"url": "https://www.sogou.com/"
+				}
+			}, {
+				"app_id": "wui-calculator",
+				"title": "计算器",
+				"customSize": true,
+				"icon": "fa fa-calculator",
+				"backgroundColor": "rgb(255, 85, 127)",
+				"type": "webApp",
+				"style": {
+					"width": 340,
+					"height": 450
+				},
+				"default": {}
+			}
+		]
+	}
+
+
+}
