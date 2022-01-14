@@ -74,51 +74,80 @@
 	// 应用商店系统
 	"systemStores": {
 		"data": [ // 数据
-			{	
-				"app_id": "wui-my-computer",
-				"title": "我的电脑",
-				"icon": "fa fa-desktop",
-				"customSize": false,
-				"backgroundColor": "rgb(194, 187, 183，0.3)",
-				"type": "systemApp",
-				"style": {},
-				"default": {}
-			},
-			{
-				"app_id": "wui-app-store",
-				"title": "应用商店",
-				"customSize": false,
-				"icon": "fa fa-shopping-bag",
-				"backgroundColor": "rgb(179, 106, 186)",
-				"type": "systemApp",
-				"style": {},
-				"default": {}
-			},
-			{
-				"app_id": "wui-browser",
-				"title": "浏览器",
-				"customSize": false,
-				"icon": "fa fa-internet-explorer",
-				"backgroundColor": "rgb(58, 85, 194)",
-				"type": "systemApp",
-				"style": {},
-				"default": {
-					"name": "搜狗搜索",
-					"url": "https://www.sogou.com/"
-				}
-			}, {
-				"app_id": "wui-calculator",
-				"title": "计算器",
-				"customSize": true,
-				"icon": "fa fa-calculator",
-				"backgroundColor": "rgb(255, 85, 127)",
-				"type": "webApp",
-				"style": {
-					"width": 340,
-					"height": 450
-				},
-				"default": {}
-			}
+			// {	
+			// 	"app_id": "wui-my-computer",
+			// 	"title": "我的电脑",
+			// 	"icon": "fa fa-desktop",
+			// 	"customSize": false,
+			// 	"backgroundColor": "rgb(194, 187, 183，0.3)",
+			// 	"type": "systemApp",
+			// 	"style": {},
+			// 	"default": {
+			// 		"original_fileList": [{
+			// 			"id": "0-1",
+			// 			"name": "图片库",
+			// 			"fileType": "folder",
+			// 			"children": []
+			// 		}, {
+			// 			"id": "0-2",
+			// 			"name": "视频库",
+			// 			"fileType": "folder",
+			// 			"children": []
+			// 		}, {
+			// 			"id": "0-3",
+			// 			"name": "文档库",
+			// 			"fileType": "folder",
+			// 			"children": []
+			// 		}, {
+			// 			"id": "0-4",
+			// 			"name": "音乐库",
+			// 			"fileType": "folder",
+			// 			"children": []
+			// 		}]
+			// 	},
+			// 	"description":"该应用是系统内置应用，用于用户资源的存储，包含图片库、视频库、文档库和音乐库。"
+			// },
+			// {
+			// 	"app_id": "wui-app-store",
+			// 	"title": "应用商店",
+			// 	"customSize": false,
+			// 	"icon": "fa fa-shopping-bag",
+			// 	"backgroundColor": "rgb(179, 106, 186)",
+			// 	"type": "systemApp",
+			// 	"style": {},
+			// 	"default": {},
+			// 	"description":"该应用是系统内置应用，用于管理云桌面系统应用库和用户应用库，用户可自行对应用进行安装和卸载，后续也会更新一些好玩的应用，欢迎体验。"
+			// },
+			// {
+			// 	"app_id": "wui-browser",
+			// 	"title": "浏览器",
+			// 	"customSize": false,
+			// 	"icon": "fa fa-internet-explorer",
+			// 	"backgroundColor": "rgb(58, 85, 194)",
+			// 	"type": "systemApp",
+			// 	"style": {},
+			// 	"default": {
+			// 		"list":[{
+			// 			"name": "搜狗搜索",
+			// 			"url": "https://www.sogou.com/"
+			// 		}]
+			// 	},
+			// 	"description":"该应用是系统内置应用，用于网页的浏览和搜索。"
+			// }, 
+			// {
+			// 	"app_id": "wui-calculator",
+			// 	"title": "计算器",
+			// 	"customSize": true,
+			// 	"icon": "fa fa-calculator",
+			// 	"backgroundColor": "rgb(255, 85, 127)",
+			// 	"type": "webApp",
+			// 	"style": {
+			// 		"width": 340,
+			// 		"height": 450
+			// 	},
+			// 	"default": {},
+			// 	"description":"该应用是个人应用，是基于web实现的小工具。"
+			// }
 		]
 	}
 

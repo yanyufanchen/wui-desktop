@@ -37,7 +37,7 @@
 					
 				}else{
 					user.wuiModals.push({
-						id:user.wuiModals.length+1,
+						id:this.Web_api.getArrMaxValue(user.wuiModals,'id')+1,
 						app_id:active.app_id,
 						show_flag:true,
 						zIndex:this.Web_api.getArrMaxValue(user.wuiModals,'zIndex')+1,

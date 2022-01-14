@@ -1,6 +1,5 @@
-<template>
-	<div class="fileViewer">
-		文件查看器
+<!-- <template>
+	<div class="demo">
 	</div>
 </template>
 
@@ -9,7 +8,7 @@
 		mapState
 	} from 'vuex';
 	export default {
-		name:'fileViewer',
+		name:'demo',
 		props: {
 			options: {}
 		},
@@ -37,3 +36,4 @@
 <style lang="less" scoped>
 	
 </style>
+ -->

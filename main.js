@@ -5,7 +5,9 @@ import './static/css/normalize.css'
 import './common.scss'
 import 'element-ui/lib/theme-chalk/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
-// import './static/style/main.css'
+import 'element-ui/lib/theme-chalk/base.css';
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+Vue.component(CollapseTransition.name, CollapseTransition)
 import 'element-ui/lib/theme-chalk/display.css' // elment
 import 'font-awesome/css/font-awesome.min.css' // font
 

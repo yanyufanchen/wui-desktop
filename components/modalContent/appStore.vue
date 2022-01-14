@@ -24,8 +24,8 @@
 									<div class="content_item_box_icon"><i :class="item.icon"></i></div>
 									<div class="content_item_box_title">{{item.title}}</div>
 									<div class="content_item_box_btn">
-										<span>下载</span>
-										<!-- <span>已下载</span> -->
+										<span v-if="user.myappList.find(item2=>item2.app_id===item.app_id)">已安装</span>
+										<span class="appBtn" v-else @click="installApp(item)">安装</span>
 									</div>
 								</div>
 
@@ -40,23 +40,23 @@
 							<el-col :span="24" v-for="item in user.myappList" :key="item.app_id">
 								<div class="content_item_box flex XleftYcenter" style="padding:10px;margin-bottom:10px"
 									:style="{'backgroundColor':getActiveApp(item.app_id).backgroundColor}">
-									<div class="content_item_box_icon" style="padding: 10px;background:#fff;border-radius:5px;margin-right:5px"><i :class="getActiveApp(item.app_id).icon"></i></div>
+									<div class="content_item_box_icon"
+										style="padding: 10px;background:#fff;border-radius:5px;margin-right:5px"><i
+											:class="getActiveApp(item.app_id).icon"></i></div>
 									<div class="content_item_box_message flex XleftYcenter" style="flex:1;height:100%">
-										<div class="content_item_box_title" style="flex:1;height:100%;margin-right:40px">
-											<span style="font-size: 15px;font-weight: 550;color: #333;">{{getActiveApp(item.app_id).title}}</span>
-											<p class="p_hide" style="color: #333;">我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用
-											我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用
-											我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用
-											我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用我的应用
-											</p>
+										<div class="content_item_box_title"
+											style="flex:1;height:100%;margin-right:40px">
+											<span
+												style="font-size: 15px;font-weight: 550;color: #333;">{{getActiveApp(item.app_id).title}}</span>
+											<p class="p_hide" style="color: #333;">{{getActiveApp(item.app_id).description}}</p>
 										</div>
-										<div class="content_item_box_time" style="padding:0 10px">2020/10/10</div>
+										<div class="content_item_box_time" style="padding:0 10px">{{Time.formatTime(Time.transformTimeStr(item.installtime),'Y-M-D')}}</div>
 									</div>
 									<div class="content_item_box_btn">
-										<span>卸载</span>
+										<span v-if="getActiveApp(item.app_id).type==='systemApp'">卸载</span>
+										<span v-else class="appBtn" @click="uninstall(item)">卸载</span>
 									</div>
 								</div>
-					
 							</el-col>
 						</el-row>
 					</div>
@@ -91,7 +91,7 @@
 			}
 		},
 		computed: {
-			...mapState(['stores','user'])
+			...mapState(['stores', 'user'])
 		},
 		created() {
 
@@ -104,8 +104,39 @@
 				this.activeTab = type
 			},
 			// 获取当前应用信息
-			getActiveApp(app_id){
-				return this.stores.find(item=>item.app_id===app_id)
+			getActiveApp(app_id) {
+				return this.stores.find(item => item.app_id === app_id)
+			},
+			// 安装App
+			installApp(item) {
+				this.$confirm('确定要安装该应用吗?', item.title, {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					// 将该应用数据写入user的应用列表
+					let user = this.Web_api.clone(this.user)
+					user.myappList.push({
+						app_id: item.app_id,
+						data: item.default,
+						id: user.myappList[user.myappList.length - 1].id + 1
+
+					})
+					this.$store.commit('updateUser', user);
+				}).catch(() => {});
+			},
+			// 卸载app
+			uninstall(item) {
+				this.$confirm('确定要卸载该应用吗?', this.getActiveApp(item.app_id).title, {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					// 将该应用数据写入user的应用列表
+					let user = this.Web_api.clone(this.user)
+					user.myappList = user.myappList.filter(item2 => item2.app_id !== item.app_id)
+					this.$store.commit('updateUser', user);
+				}).catch(() => {});
 			}
 
 		}
@@ -163,8 +194,10 @@
 				width: 100%;
 				height: 100%;
 				overflow: hidden;
+
 				.contentItem {
 					height: 100%;
+
 					.header {
 						width: 100%;
 						height: 40px;
@@ -179,6 +212,7 @@
 						padding: 0 20px;
 						padding-top: 10px;
 						overflow-y: auto;
+
 						.content_item_box:hover {
 							background-color: #409eff36 !important;
 							border: 1px solid #409effb3 !important;
@@ -208,10 +242,14 @@
 									line-height: 20px;
 									padding: 0 10px;
 									border: 1px;
+									background-color: #bebbbc;
+								}
+
+								.appBtn {
 									background-color: #007AFF;
 								}
 
-								span:hover {
+								.appBtn:hover {
 									background-color: #55ffff;
 								}
 							}

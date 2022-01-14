@@ -27,6 +27,8 @@
 			<browser v-if="options.item.app_id==='wui-browser'" :options="options" />
 			<computer v-else-if="options.item.app_id==='wui-my-computer'" :options="options" />
 			<appStore v-else-if="options.item.app_id==='wui-app-store'" :options="options" />
+			<!-- 查看器 -->
+			<fileViewer v-else-if="options.item.app_id==='wui-fileViewer'" :options="options" />
 		</div>
 	</div>
 </template>
@@ -38,6 +40,7 @@
 	import browser from '@/components/modalContent/browser.vue'
 	import computer from '@/components/modalContent/computer.vue'
 	import appStore from '@/components/modalContent/appStore.vue'
+	import fileViewer from '@/components/modalContent/fileViewer.vue'
 	export default {
 		name: 'wuimodal', // 应用弹框
 		data() {
@@ -61,7 +64,8 @@
 		components: {
 			browser,
 			computer,
-			appStore
+			appStore,
+			fileViewer
 		},
 		mounted() {
 			this.setModalSize()
