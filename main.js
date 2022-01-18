@@ -36,6 +36,7 @@ Vue.prototype.Utils = Utils
 import Time from './common/time' // 时间转换工具
 Vue.prototype.Time = Time
 import Api from './common/api' // 请求云函数
+Api.VM=app // 将实例化挂载到api上
 Vue.prototype.Api = Api
 import drag from './common/drag';
 Vue.use(drag)

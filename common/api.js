@@ -1,4 +1,5 @@
 export default class Api {
+	static VM=null // vue实例化对象
 	// 请求数据库
 	static sendUniCloud(that, data, flag = true) { // path==云函数 data={mode: getarticle,event: {参数}}
 		let path = 'wui-desktop'
@@ -49,12 +50,8 @@ export default class Api {
 	}
 	// 上传云存储
 	static async uploadFileCloud(file, UploadProgress) {
-		if (file.size > 10 * 1000 * 1000) {
-			return {
-				mes: '文件超出10M限制',
-				status: false
-			}
-		}
+		console.log(file,'上传云存储')
+		this.checkStorageMax(file.size)
 		const result = await uniCloud.uploadFile({
 			filePath: file.url,
 			cloudPath: file.name,
@@ -81,7 +78,49 @@ export default class Api {
 			status: true
 		}
 	}
-
+	// 获取用户和系统存储量
+	static computeStorageMax(){
+		let maxStorage=100*1024*1024 // 100M
+		let filelist=this.VM.$store.state.user.myappList[0].data.original_fileList
+		let storageNum=0
+		let computes=(list)=>{
+			list.length>0&&list.forEach(item=>{
+				if(item.fileSize){
+					storageNum=storageNum+item.fileSize
+				}
+				if(item.children){
+					computes(item.children)
+				}
+			})
+		}
+		computes(filelist)
+		return {
+			userStorageNum:storageNum, // 用户存储量
+			uploadMaxStorageNum:20*1024*1024, // 最大上传量
+			systemStorageNum:maxStorage, // 系统存储量
+		}
+	}
+	// 检测是否满足存储
+	static checkStorageMax(fileSize){
+		let computeStorageRes=this.computeStorageMax()
+		if(fileSize>computeStorageRes.uploadMaxStorageNum){
+			return {
+				status:false,
+				mes:'超出最大上传限制'
+			}
+		}
+		let oddStoreNum=computeStorageRes.systemStorageNum-computeStorageRes.userStorageNum
+		if(fileSize>oddStoreNum){
+			return {
+				status:false,
+				mes:'存储空间不足'
+			}
+		}
+		return {
+			status:true,
+			mes:'检测通过'
+		}
+	}
 	static Toast(message, type = 'success', that) {
 		that.$message({
 			showClose: true,

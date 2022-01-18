@@ -68,7 +68,7 @@ const store = new Vuex.Store({
 				}
 			});
 			if(!res.status){
-				this._vm.$message.error('或许用户信息失败')
+				this._vm.$message.error('获取用户信息失败')
 				return
 			}
 			if(res.data.length==0){

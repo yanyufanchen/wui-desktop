@@ -107,3 +107,14 @@
 .el-tooltip__popper {
 	padding: 3px!important;
 }
+// loading
+.el-loading-mask {
+	background-color: #fdfdfd00 !important;
+}
+//修改loading加载时的颜色
+    .el-loading-spinner .path{
+      stroke: #1cc8c0!important;
+    }
+	.el-loading-text {
+		color: #1cc8c0!important;
+	}

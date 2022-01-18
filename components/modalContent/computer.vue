@@ -27,7 +27,7 @@
 		<div class="space">
 			<el-row :gutter="12">
 				<el-col :span="4" v-for="item in getActiveList(getoriginal_fileList(user))" :key="item.id">
-					<el-card shadow="click" :body-style="{ padding: '0px' }" style="cursor: default;">
+					<el-card shadow="click" :body-style="{ padding: '0px' }" style="cursor: default;margin-bottom:5px">
 						<el-tooltip placement="bottom" effect="light">
 							<div slot="content">
 								<div v-if="item.fileType!=='folder'">
@@ -59,7 +59,7 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- pdf -->
-								<div class="file flex YcenterXcenter" v-else-if="item.fileType.indexOf('pdf')>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['application/pdf'].findIndex(item2=>item.fileType===item2)>-1">
 									<!-- 上传中 -->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
@@ -69,7 +69,7 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- word -->
-								<div class="file flex YcenterXcenter" v-else-if="['doc','docx','rtf'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'].findIndex(item2=>item.fileType===item2)>-1">
 									<!-- 上传中 -->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
@@ -79,7 +79,7 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- pptx -->
-								<div class="file flex YcenterXcenter" v-else-if="['pptx'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['application/vnd.openxmlformats-officedocument.presentationml.presentation'].findIndex(item2=>item.fileType===item2)>-1">
 									<!-- 上传中 -->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
@@ -89,7 +89,7 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- 表格 -->
-								<div class="file flex YcenterXcenter" v-else-if="['xlsx'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'].findIndex(item2=>item.fileType==item2)>-1">
 									<!-- 上传中 -->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
@@ -99,7 +99,7 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- 文本 -->
-								<div class="file flex YcenterXcenter" v-else-if="['txt'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['text/plain'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
 									<!-- 上传中 -->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
@@ -119,7 +119,7 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- 压缩包 -->
-								<div class="file flex YcenterXcenter" v-else-if="['rar','zip','7z'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['application/zip'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
 									<!-- 上传中 -->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
@@ -129,7 +129,7 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- audio-->
-								<div class="file flex YcenterXcenter" v-else-if="['mp3'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['audio/mpeg'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
 									<!-- 上传中 -->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
@@ -139,13 +139,23 @@
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 								<!-- video-->
-								<div class="file flex YcenterXcenter" v-else-if="['mp3'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
+								<div class="file flex YcenterXcenter" v-else-if="['video/mp4'].findIndex(item2=>item.fileType.indexOf(item2)>-1)>-1">
 									<!-- 上传中-->
 									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
 									<!-- 上传失败 -->
 									<i class="el-icon-remove" color="red"
 										v-else-if="item.status&&item.status=='error'"></i>
 									<i class="fa fa-file-video-o" v-else></i>
+									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
+								</div>
+								<!-- 未知格式 -->
+								<div class="file flex YcenterXcenter" v-else>
+									<!-- 上传中 -->
+									<i class="el-icon-loading" v-if="item.status&&item.status=='ready'"></i>
+									<!-- 上传失败 -->
+									<i class="el-icon-remove" color="red"
+										v-else-if="item.status&&item.status=='error'"></i>
+									<i class="fa fa-file-o" v-else></i>
 									<span class="text_hide" style="width: 100%;">{{item.name}}</span>
 								</div>
 							</div>
@@ -156,8 +166,8 @@
 		</div>
 		<div class="message">
 			<div class="title">空间</div>
-			<el-progress :text-inside="true" :stroke-width="25" :percentage="10"></el-progress>
-			<div class="text">10M/100M</div>
+			<el-progress :text-inside="true" :stroke-width="25" :percentage="Number(((Api.computeStorageMax().userStorageNum/1024/1024)/(Api.computeStorageMax().systemStorageNum/1024/1024)*100).toFixed())"></el-progress>
+			<div class="text">{{(Api.computeStorageMax().userStorageNum/1024/1024).toFixed()}}M/{{(Api.computeStorageMax().systemStorageNum/1024/1024).toFixed()}}M</div>
 		</div>
 	</div>
 </template>
@@ -188,12 +198,11 @@
 			}
 		},
 		computed: {
-			...mapState(['user']),
+			...mapState(['stores','user']),
 
 		},
 		created() {},
 		mounted() {
-
 		},
 		methods: {
 			// 获取当前数据
@@ -224,6 +233,8 @@
 			},
 			// 上传
 			async upload(file, fileList) {
+				// 检测是否满足上传大小
+				this.Api.checkStorageMax(file.size)
 				file.url = URL.createObjectURL(file.raw)
 				// 将对象写入页面 同时上传 写入服务器
 				let activedata = this.getActiveList(this.getoriginal_fileList(this.user))
@@ -239,9 +250,8 @@
 				}
 				activedata.push(fileData)
 				let res = await this.Api.uploadFileCloud(file, this.UploadProgress)
-				// console.log(res,'res')
 				if (!res.status) {
-					fileData.status = 'error'
+					this.$message.error(res.mes)
 					return
 				}
 				fileData.status = 'success'
@@ -275,7 +285,18 @@
 					this.crumbsList.push(item)
 					this.activeId = item.id
 				} else { // 激活文件查看器
-					console.log(item, '查看文件')
+					let activeApp=this.stores.find(item=>item.app_id=='wui-fileViewer')
+					let user=this.Web_api.clone(this.user)
+					user.wuiModals.push({
+						id:this.Web_api.getArrMaxValue(user.wuiModals,'id')+1,
+						app_id:activeApp.app_id,
+						show_flag:true,
+						zIndex:this.Web_api.getArrMaxValue(user.wuiModals,'zIndex')+1,
+						data:{
+							file:item
+						}
+					})
+					this.$store.dispatch('setUserApi',user)
 				}
 			},
 			// 删除文件 只做了两个固定层级
@@ -349,7 +370,7 @@
 
 		.space {
 			padding: 20px;
-
+			
 			.file {
 				padding: 20px;
 
@@ -360,7 +381,9 @@
 
 				span {}
 			}
-
+			.fileBox {
+				border: 1px solid #60626645;
+			}
 			.active {
 				background-color: #1a7afb21;
 				border: 1px solid rgb(26, 122, 251);

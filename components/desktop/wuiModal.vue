@@ -129,7 +129,8 @@
 				if (type === 3) { // 关闭
 				let user = this.Web_api.clone(this.user)
 					user.wuiModals= user.wuiModals.filter(item => item.id !== this.options.item.id)
-					this.$store.commit('updateUser', user);
+					// 写入vuex
+					this.$store.dispatch('setUserApi', user);
 				}
 			},
 			
@@ -144,8 +145,8 @@
 					this.width = document.body.clientWidth * this.size
 					this.height = (document.body.clientHeight - 40) * this.size
 				}
-				this.left = (document.body.clientWidth - this.width) / 2 + this.options.item.id * 10
-				this.top = (document.body.clientHeight - this.height) / 2 + this.options.item.id * 10
+				this.left = (document.body.clientWidth - this.width) / 2 + this.options.item.id * 10 // 控制窗口的定位
+				this.top = (document.body.clientHeight - this.height) / 2 + this.options.item.id * 0
 
 				if (this.size == 1) { // 最大化
 					this.left = 0

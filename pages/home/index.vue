@@ -8,8 +8,8 @@
 		</div>
 		<bottomBar ref="bottomBar" />
 	</div>
-	<div class="desktop flex YcenterXcenter" v-else>
-		无
+	<div class="gradient loading" v-loading="loading"  background="none" element-loading-text="桌面加载中……" v-else>
+		<img src="../../static/image/loading.jpg" style="width:100%;height:100%;" alt="">
 	</div>
 </template>
 
@@ -24,7 +24,8 @@
 	export default {
 		data() {
 			return {
-				show:false
+				show:false,
+				loading: true
 			};
 		},
 
@@ -91,7 +92,17 @@
 	uni-page-body {
 		height: 100%;
 	}
-
+	.loading {
+		width: 100%;
+		height: 100vh;
+		
+	}
+	.gradient{
+	    // background-image: -moz-linear-gradient(top, #8fa1ff, #3757fa)!important; /* Firefox */
+	    // background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #2a5d9e), color-stop(1, #4f8fc5))!important; /* Saf4+, Chrome */
+	    // filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c6ff00', endColorstr='#538300', GradientType='0')!important; /* IE*/
+	}
+	
 	.desktop {
 		width: 100%;
 		height: 100vh;
