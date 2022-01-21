@@ -1,6 +1,6 @@
 <template>
   <div class="bottomBar">
-    <div class="box flex XcenterYcenter" :style="{ background: systems.color }">
+    <div class="box flex XcenterYcenter" :style="{ background: user.systemData.color }">
       <div class="left wui-icon">
         <el-popover
           popper-class="popper-lowerMenu"
@@ -19,7 +19,7 @@
             <i class="fa fa-windows fa-lg"></i>
           </div>
           <slot>
-            <div class="lowerMenu" :style="{ background: systems.color }">
+            <div class="lowerMenu" :style="{ background: user.systemData.color }">
               <div
                 class="sidebar"
                 @mouseleave="sidebarWidth = '48px'"
@@ -52,7 +52,7 @@
                     <slot>
                       <div
                         class="userSelect"
-                        :style="{ background: systems.color }"
+                        :style="{ background: user.systemData.color }"
                       >
                         <div class="userSelectItem" @click="userSelect(1)">
                           修改账户
@@ -63,7 +63,7 @@
                       </div>
                     </slot>
                   </el-popover>
-                  <div class="btn wui-icon" title="系统设置">
+                  <div class="btn wui-icon" title="系统设置" @click="systemSet">
                     <div class="icon" style="background: none">
                       <i class="fa fa-fw fa-gear"></i>
                     </div>
@@ -152,7 +152,7 @@
               <div class="yearDay">2021/12/16</div>
             </div>
             <slot>
-              <div class="dateBox" :style="{ background: systems.color }">
+              <div class="dateBox" :style="{ background: user.systemData.color }">
                 <sCalendar />
               </div>
             </slot>
@@ -166,7 +166,7 @@
     </div>
     <div
       class="drawer"
-      :style="{ width: drawerNewsWidth, background: systems.color }"
+      :style="{ width: drawerNewsWidth, background: user.systemData.color }"
     >
       <div
         class="mask"
@@ -221,14 +221,39 @@ export default {
     },
     // 点击左下角菜单用户按钮  1 修改用户 2 锁定
     userSelect(type) {
-      console.log(type);
+	  this.lowerMenuUserFlag=false
       if (type === 1) {
+		  this.lowerMenuFlag=false
+		  this.Utils.openModal(this,{
+			app_id:'wui-system'
+		},{
+		  	data:{
+		  		type:'system-user'
+		  	}
+		  })
       }
       if (type === 2) {
         this.$BusEvent.$emit("initDesktop");
         this.$store.commit("locking", true);
       }
     },
+	systemSet(){
+		this.lowerMenuFlag=false
+		// 如果没有下载该应用,就无法查看
+		if(!this.user.myappList.find(item=>item.app_id=='wui-system')){
+			this.$message.warning('请前往引用商店安装系统设置')
+			return
+		}
+		this.Utils.openModal(this,
+		{
+			app_id:'wui-system'
+		},
+		{
+			data:{
+				type:'system-home'
+			}
+		})
+	},
     // 退出
     quit() {
       this.$confirm('确定要退出当前账户吗?', '退出', {

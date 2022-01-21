@@ -15,6 +15,9 @@ export default class Web_api {
 		return Arr
 	}
 	static getArrMaxValue(Arr, key) { // 数组最大值取值
+		if(Arr.length==0){
+			return 0
+		}
 		let newArr = Web_api.clone(Arr, key)
 		newArr.sort((a, b) => {
 			if (a[key] < b[key]) {

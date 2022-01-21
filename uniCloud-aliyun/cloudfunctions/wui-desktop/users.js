@@ -80,8 +80,12 @@ exports.addAccount = async (db, event, context) => {
 exports.getAccountList = async (db, event, context) => {
 	const collection = db.collection('users')
 	var res = await collection.field({
-		'password': false,
-		'token': false
+		'token': false,
+		'lowerMenu': false,
+		'myappList': false,
+		'shortcutList': false,
+		'systemData': false,
+		'wuiModals': false
 	}).get()
 
 	return {
@@ -131,6 +135,29 @@ exports.updateAccount = async (db, event, context) => {
 	var res = await collection.where({
 		token: event.token
 	}).update(event.data)
+	return {
+		status: true,
+		mes: '修改成功'
+	}
+}
+// 修改密码
+exports.editPassword = async (db, event, context) => {
+	const collection = db.collection('users')
+	var res = await collection.where({
+		token: event.token
+	}).get()
+	var user = res.data[0]
+	if (user.password !== event.data.password) {
+		return {
+			status: false,
+			mes: '原密码错误'
+		}
+	}
+	var res = await collection.where({
+		token: event.token
+	}).update({
+		password:event.data.newPassword
+	})
 	return {
 		status: true,
 		mes: '修改成功'

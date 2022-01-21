@@ -50,7 +50,7 @@
 												style="font-size: 15px;font-weight: 550;color: #333;">{{getActiveApp(item.app_id).title}}</span>
 											<p class="p_hide" style="color: #333;">{{getActiveApp(item.app_id).description}}</p>
 										</div>
-										<div class="content_item_box_time" style="padding:0 10px">{{Time.formatTime(Time.transformTimeStr(item.installtime),'Y-M-D')}}</div>
+										<div class="content_item_box_time" style="padding:0 10px">{{Time.formatTime(item.installtime,'Y-M-D')}}</div>
 									</div>
 									<div class="content_item_box_btn">
 										<span v-if="getActiveApp(item.app_id).type==='systemApp'">卸载</span>
@@ -119,7 +119,8 @@
 					user.myappList.push({
 						app_id: item.app_id,
 						data: item.default,
-						id: user.myappList[user.myappList.length - 1].id + 1
+						id: user.myappList[user.myappList.length - 1].id + 1,
+						installtime:new Date()
 
 					})
 					this.$store.commit('updateUser', user);
@@ -208,11 +209,12 @@
 					}
 
 					.content_main {
+						box-sizing: border-box;
 						height: 100%;
 						padding: 0 20px;
 						padding-top: 10px;
 						overflow-y: auto;
-
+						padding-bottom: 40px;
 						.content_item_box:hover {
 							background-color: #409eff36 !important;
 							border: 1px solid #409effb3 !important;

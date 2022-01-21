@@ -25,10 +25,6 @@
 					:height="viewBoxHeight"  
 					:src="options.item.data.file.fileUrl" :name="options.item.data.file.fileUrl.name"
 					/>
-				<!-- <video id="myVideo" style="width:100px"
-					v-else-if="['video/mp4'].findIndex(item2=>options.item.data.file.fileType==item2)>-1"
-					src="https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4"
-					:danmu-list="danmuList" enable-danmu danmu-btn controls></video> -->
 				<div v-else class="no_view flex YcenterXcenter" style="width:100%;height:100%">
 					暂不支持该格式预览
 					<p>{{options.item.data.file.fileType}}</p>
@@ -44,8 +40,8 @@
 	import {
 		mapState
 	} from 'vuex';
-	import lkaudio from '@/components/lk-audio/lk-audio.vue'
-	import lkvideo from '@/components/lk-video/lk-video.vue'
+	import lkaudio from '@/components/modalContent/fileViewer/lk-audio/lk-audio.vue'
+	import lkvideo from '@/components/modalContent/fileViewer/lk-video/lk-video.vue'
 	export default {
 		name: 'fileViewer',
 		props: {

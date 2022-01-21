@@ -148,16 +148,27 @@
 			// 	"default": {},
 			// 	"description":"该应用是个人应用，是基于web实现的小工具。"
 			// }
+			// {
+			// 	"app_id": "wui-fileViewer",
+			// 	"title": "文件查看器",
+			// 	"customSize": false,
+			// 	"icon": "fa fa-calculator",
+			// 	"backgroundColor": "rgb(203, 203, 203)",
+			// 	"type": "webApp",
+			// 	"style": {},
+			// 	"default": {},
+			// 	"description":"该应用是文件资源预览工具。"
+			// },
 			{
-				"app_id": "wui-fileViewer",
-				"title": "文件查看器",
+				"app_id": "wui-system",
+				"title": "系统设置",
 				"customSize": false,
-				"icon": "fa fa-calculator",
-				"backgroundColor": "rgb(203, 203, 203)",
-				"type": "webApp",
+				"icon": "fa fa-cog fa-fw",
+				"backgroundColor": "rgb(85, 170, 255)",
+				"type": "systemApp",
 				"style": {},
 				"default": {},
-				"description":"该应用是文件资源预览工具。"
+				"description":"该应用是系统设置。"
 			}
 		]
 	}

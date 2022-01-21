@@ -1,5 +1,5 @@
 <template>
-	<div class="desktopIcons" :style="{'backgroundImage':`url(${systems.wallpapers.find(item=>item.id===systems.wallpaper).url})`}">
+	<div class="desktopIcons" :style="{'backgroundImage':`url(${[...systems.wallpapers,...user.systemData.wallpapers].find(item=>item.id===user.systemData.wallpaper).url})`}">
 		<div class="shortcut flex YcenterXcenter" v-for="item in user.shortcutList" :key="item.id"
 			 @dblclick="openModal(item)">
 			<div class="icon" :style="{'backgroundColor':item.backgroundColor}">
@@ -28,23 +28,9 @@
 		methods: {
 			// 打开应用
 			openModal(active) {
-				// 检索是否有该应用 有(显示) 无(添加)
-				let user=this.Web_api.clone(this.user)
-				let activeApp=user.wuiModals.find(item=>item.app_id==active.app_id)
-				if(activeApp){
-					// 置顶显示
-					this.Utils.setModalTop(this, activeApp)
-					
-				}else{
-					user.wuiModals.push({
-						id:this.Web_api.getArrMaxValue(user.wuiModals,'id')+1,
-						app_id:active.app_id,
-						show_flag:true,
-						zIndex:this.Web_api.getArrMaxValue(user.wuiModals,'zIndex')+1,
-						data:{}
-					})
-					this.$store.dispatch('setUserApi',user)
-				}
+				this.Utils.openModal(this,active,{
+					data:{}
+				})
 			}
 		}
 	};

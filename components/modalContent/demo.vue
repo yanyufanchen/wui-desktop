@@ -1,6 +1,6 @@
 <template>
-	<div class="fileViewer">
-		文件查看器
+	<div class="userlist">
+		用户列表
 	</div>
 </template>
 
@@ -9,7 +9,7 @@
 		mapState
 	} from 'vuex';
 	export default {
-		name:'fileViewer',
+		name:'userlist',
 		props: {
 			options: {}
 		},

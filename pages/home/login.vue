@@ -75,7 +75,7 @@
 					return;
 				}
 
-				const res = await this.Api.sendUniCloud(this, {
+				const res = await this.Api.sendUniCloud({
 					model: 'login',
 					event: {
 						username: this.from.username,

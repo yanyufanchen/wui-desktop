@@ -285,6 +285,12 @@
 					this.crumbsList.push(item)
 					this.activeId = item.id
 				} else { // 激活文件查看器
+					// 如果没有下载该应用,就无法查看
+					if(!this.user.myappList.find(item=>item.app_id=='wui-fileViewer')){
+						this.$message.warning('请前往引用商店安装文件查看器')
+						return
+					}
+					
 					let activeApp=this.stores.find(item=>item.app_id=='wui-fileViewer')
 					let user=this.Web_api.clone(this.user)
 					user.wuiModals.push({
@@ -324,7 +330,7 @@
 					this.$store.dispatch('setUserApi', user);
 					// 发起删除
 					if (fileUrl) {
-						this.Api.sendUniCloud(this, {
+						this.Api.sendUniCloud({
 							model: 'deleteFileCloud',
 							event: {
 								token:uni.getStorageSync('token'),

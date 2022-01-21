@@ -38,7 +38,7 @@
 					this.$message.error('请输入密码');
 					return
 				}
-				const res = await this.Api.sendUniCloud(this, {
+				const res = await this.Api.sendUniCloud({
 					model: 'checkAccount',
 					event: {
 						token:uni.getStorageSync('token'),

@@ -10,6 +10,18 @@
 	</div>
 	<div class="gradient loading" v-loading="loading"  background="none" element-loading-text="桌面加载中……" v-else>
 		<img src="../../static/image/loading.jpg" style="width:100%;height:100%;" alt="">
+		<div class="init">
+			<div >
+				<span v-if="initStates.getUser==='warn'">获取用户数据中……</span>
+				<span v-else-if="initStates.getUser==='success'">获取用户数据完毕</span>
+				<span v-if="initStates.getUser==='warn'">获取用户数据失败</span>
+			</div>
+			<div >
+				<span v-if="initStates.getSystem==='warn'">获取系统设置中……</span>
+				<span v-else-if="initStates.getSystem==='success'">获取系统设置完毕</span>
+				<span v-if="initStates.getSystem==='warn'">获取系统设置失败</span>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -25,12 +37,17 @@
 		data() {
 			return {
 				show:false,
-				loading: true
+				loading: true,
+				initStates:{
+					getStore:'warn',
+					getUser:'warn',
+					getSystem:'warn'
+				}, // 加载状态
 			};
 		},
 
 		computed: {
-			...mapState(['user', 'locking', 'desktops', 'stores'])
+			...mapState(['user', 'locking', 'desktops', 'stores','initStates'])
 		},
 		components: {
 			bottomBar,
@@ -47,12 +64,23 @@
 				this.$store.commit('locking', true);
 			}
 			// 查询商店应用
-			await this.$store.dispatch('getStoreApi')
+			let checkApi1=await this.$store.dispatch('getStoreApi')
+			console.log(checkApi1,'查询商店应用')
+			this.initStates.getStore=checkApi1?'success':'error'
 			// 查询用户信息
-			await this.$store.dispatch('getUserApi')
+			let checkApi2=await this.$store.dispatch('getUserApi')
+			console.log(checkApi2,'查询用户信息')
+			this.initStates.getUser=checkApi2?'success':'error'
 			// 查询系统设置
-			await this.$store.dispatch('getSystemApi')
+			let checkApi3=await this.$store.dispatch('getSystemApi')
+			console.log(checkApi3,'查询系统设置')
+			this.initStates.getSystem=checkApi3?'success':'error'
 			// 请求完成后显示桌面
+			if(!checkApi1||!checkApi2||!checkApi3){
+				this.show=false
+				return
+			}
+			return
 			this.show=true
 			
 			// 图标从上到下摆放8个  90高一个
@@ -95,6 +123,13 @@
 	.loading {
 		width: 100%;
 		height: 100vh;
+		.init {
+			position: absolute;
+			width: 300px;
+			height: 100px;
+			// z-index: 1000;
+			background-color: #ccc;
+		}
 		
 	}
 	.gradient{

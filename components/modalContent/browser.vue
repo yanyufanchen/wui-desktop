@@ -77,7 +77,7 @@
 				})
 				this.editableTabsValue = `新标签页-搜狗搜索_${active.data.list.length+1}`;
 				// 写入vuex
-				this.$store.commit('updateUser', user);
+				this.$store.dispatch('setUserApi', this.user);
 			},
 			removeTab(targetName) {
 				let user = this.Web_api.clone(this.user)
@@ -95,7 +95,7 @@
 					}
 				})
 				// 写入vuex
-				this.$store.commit('updateUser', user);
+				this.$store.dispatch('setUserApi', this.user);
 			}
 		}
 	}

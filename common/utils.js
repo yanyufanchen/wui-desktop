@@ -97,4 +97,23 @@ export default class Utils {
 		// 写入vuex
 		that.$store.dispatch('setUserApi',user)
 	}
+	static openModal(that,active,defaultObj) {
+		// 检索是否有该应用 有(显示) 无(添加)
+		let user=that.Web_api.clone(that.$store.state.user)
+		let activeApp=user.wuiModals.find(item=>item.app_id==active.app_id)
+		if(activeApp){
+			// 置顶显示
+			that.Utils.setModalTop(that, activeApp)
+			
+		}else{
+			user.wuiModals.push({
+				id:that.Web_api.getArrMaxValue(user.wuiModals,'id')+1,
+				app_id:active.app_id,
+				show_flag:true,
+				zIndex:that.Web_api.getArrMaxValue(user.wuiModals,'zIndex')+1,
+				data:defaultObj.data?defaultObj.data:{}
+			})
+			that.$store.dispatch('setUserApi',user)
+		}
+	}
 }

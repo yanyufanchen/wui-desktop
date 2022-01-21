@@ -31,6 +31,20 @@ exports.main = async (event, context) => {
 		}
 		return await users.updateAccount(db, event.event, context)
 	}
+	if (event.model == 'editPassword') { // 修改用户密码
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await users.editPassword(db, event.event, context)
+	}
+	if (event.model == 'getAccountList') { // 查询用户列表
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await users.getAccountList(db, event.event, context)
+	}
 	// 系统设置
 	if (event.model == 'getSystemData') { // 查询系统设置
 		let checkToken = await users.checkToken(db, event.event, context)
@@ -38,6 +52,13 @@ exports.main = async (event, context) => {
 			return checkToken
 		}
 		return await systemData.getSystemData(db, event.event, context)
+	}
+	if (event.model == 'updateSystemData') { // 更新系统设置
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await systemData.updateSystemData(db, event.event, context)
 	}
 	// 系统应用商店
 	if (event.model == 'getSystemStores') { // 查询系统应用商店

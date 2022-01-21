@@ -1,0 +1,139 @@
+<template>
+	<div class="userlist">
+		<el-button @click="()=>{
+			adduserVisible=true
+			userType='add'
+		}" style="margin-bottom:10px">添加用户</el-button>
+		<el-table :data="userlist" border style="width: 100%">
+			<el-table-column fixed prop="creattime" label="创建日期">
+				<template slot-scope="scope">
+					<span>{{Time.formatTime(scope.row.creattime,'Y-M-D')}}</span>
+				</template>
+			</el-table-column>
+			<el-table-column prop="username" label="账号" width="120">
+			</el-table-column>
+			<el-table-column prop="password" label="密码" width="120">
+			</el-table-column>
+			<el-table-column prop="status" label="身份" width="120">
+			</el-table-column>
+			<el-table-column fixed="right" label="操作" width="120">
+				<template slot-scope="scope">
+					<el-button @click="editUser(scope.row)" type="text" size="small">编辑</el-button>
+					<el-button type="text" size="small">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		
+		<el-dialog title="添加用户" :visible.sync="adduserVisible" width="40%">
+			<el-form :model="userfrom" :rules="userRules" ref="userfrom" label-width="100px">
+				<el-form-item label="用户名" prop="username">
+					<el-input style="width:100%;margin-bottom:5px" v-model="userfrom.username"
+						placeholder="请输入用户名"></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="newPassword">
+					<el-input style="width:100%;margin-bottom:5px" v-model="userfrom.password"
+						placeholder="请输入新密码"></el-input>
+				</el-form-item>
+			</el-form>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="()=>{
+				adduserVisible = false
+				userfrom.username=''
+				userfrom.password=''
+			}">取 消</el-button>
+				<el-button type="primary" @click="userApi">确 定</el-button>
+			</span>
+		</el-dialog>
+	</div>
+</template>
+
+<script>
+	import {
+		mapState
+	} from 'vuex';
+	export default {
+		name: 'userlist',
+		props: {
+			options: {}
+		},
+		data() {
+			return {
+				userlist:[],
+				userfrom: {
+					username: '',
+					password: '',
+				},
+				userType:'add',
+				adduserVisible:false,
+				userRules: {
+					username: [{
+							required: true,
+							message: '请输入用户名',
+							trigger: 'blur'
+						},
+						{
+							min: 6,
+							max: 12,
+							message: '长度在 6 到 12 个字符',
+							trigger: 'blur'
+						}
+					],
+					password: [{
+							required: true,
+							message: '请输入密码',
+							trigger: 'blur'
+						},
+						{
+							min: 6,
+							max: 12,
+							message: '长度在 6 到 12 个字符',
+							trigger: 'blur'
+						}
+					]
+				}
+			}
+		},
+		computed: {
+			// ...mapState(['desktops'])
+		},
+		async created() {
+			// 查询用户列表
+			const res = await this.Api.sendUniCloud({
+				model: 'getAccountList',
+				event: {
+					token: uni.getStorageSync('token')
+				}
+			});
+			if(!res.status){
+				this.$message.error('查询失败')
+				return
+			}
+			this.userlist=res.data
+		},
+		mounted() {
+
+		},
+		methods: {
+			userApi() {
+				
+			},
+			editUser(data){
+				console.log(data,'data')
+				this.userType='edit'
+				this.adduserVisible=true
+				this.userfrom={
+					username: data.username,
+					password: data.password,
+				}
+			}
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+	.userlist {
+		box-sizing: border-box;
+		padding-right: 50px;
+		width: 100%;
+	}
+</style>

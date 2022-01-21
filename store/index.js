@@ -7,6 +7,11 @@ const store = new Vuex.Store({
 		token:'',
 		user: {}, // 登录状态
 		locking:false, // 锁定状态
+		initStates:{
+			getStore:'warn',
+			getUser:'warn',
+			getSystem:'warn'
+		}, // 加载状态
 		
 		
 		systems:{},// 系统设置
@@ -27,6 +32,9 @@ const store = new Vuex.Store({
 		mymessage:'' // 我的基本信息
 	},
 	mutations: {
+		initState(state, data){
+			state.initStates=data
+		},
 		// 登录
 		login(state, data) { // 登录状态存全局
 			state.token = data.token
@@ -61,7 +69,7 @@ const store = new Vuex.Store({
 	actions:{
 		// 查询用户信息
 		async getUserApi({ commit }){
-			const res = await this._vm.Api.sendUniCloud(this._vm, {
+			const res = await this._vm.Api.sendUniCloud({
 				model: 'getAccountDetail',
 				event: {
 					token:uni.getStorageSync('token')
@@ -69,7 +77,7 @@ const store = new Vuex.Store({
 			});
 			if(!res.status){
 				this._vm.$message.error('获取用户信息失败')
-				return
+				return false
 			}
 			if(res.data.length==0){
 				this._vm.$message.error('该用户不存在或token无效')
@@ -77,19 +85,21 @@ const store = new Vuex.Store({
 				uni.redirectTo({
 					url: "/pages/home/login"
 				});
-				return
+				return false
 			}
 			commit('updateUser', res.data[0], { root: true }) // 重点
+			return true
 		},
 		// 更新用户信息
 		async setUserApi({ commit },data){
 			commit('updateUser', data, { root: true })
 			// 更新服务器
-			const res = await this._vm.Api.sendUniCloud(this._vm, {
+			const res = await this._vm.Api.sendUniCloud({
 				model: 'updateAccount',
 				event: {
 					token:uni.getStorageSync('token'),
 					data:{
+						username:data.username,
 						lowerMenu:data.lowerMenu, // 桌面左下角菜单
 						myappList:data.myappList, // 我的应用
 						wuiModals:data.wuiModals, // 桌面弹窗
@@ -101,7 +111,7 @@ const store = new Vuex.Store({
 		
 		// 查询系统设置信息
 		async getSystemApi({ commit }){
-			const res = await this._vm.Api.sendUniCloud(this._vm, {
+			const res = await this._vm.Api.sendUniCloud({
 				model: 'getSystemData',
 				event: {
 					token:uni.getStorageSync('token')
@@ -109,18 +119,33 @@ const store = new Vuex.Store({
 			});
 			if(!res.status){
 				this._vm.$message.error('查询系统失败')
-				return
+				return false
 			}
 			// 将用户系统信息和系统信息合并
 			let system=res.data[0]
-			system.color=this.state.user.systemData.color
-			system.wallpaper=this.state.user.systemData.wallpaper
-			system.wallpapers=[...system.wallpapers,...this.state.user.systemData.wallpapers]
 			commit('updateSystem', system, { root: true }) // 重点
+			return true
+		},
+		// 设置系统设置信息
+		async setSystemApi({ commit },data){
+			commit('updateSystem', data, { root: true })
+			// 更新服务器
+			const res = await this._vm.Api.sendUniCloud({
+				model: 'updateSystemData',
+				event: {
+					token:uni.getStorageSync('token'),
+					_id:data._id,
+					data:{	
+						color:data.color,					
+						wallpaper:data.wallpaper,				
+						wallpapers:data.wallpapers
+					}
+				}
+			});
 		},
 		// 查询应用商店
 		async getStoreApi({ commit }){
-			const res = await this._vm.Api.sendUniCloud(this._vm, {
+			const res = await this._vm.Api.sendUniCloud({
 				model: 'getSystemStores',
 				event: {
 					token:uni.getStorageSync('token')
@@ -128,9 +153,10 @@ const store = new Vuex.Store({
 			});
 			if(!res.status){
 				this._vm.$message.error('查询应用商店失败')
-				return
+				return false
 			}
 			commit('updateStore', res.data, { root: true }) // 重点
+			return true
 		},
 	}
 })
