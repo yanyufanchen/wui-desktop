@@ -8,18 +8,23 @@
 		</div>
 		<bottomBar ref="bottomBar" />
 	</div>
-	<div class="gradient loading" v-loading="loading"  background="none" element-loading-text="桌面加载中……" v-else>
+	<div class="gradient loading" v-loading="loading" background="none" element-loading-text="桌面加载中……" v-else>
 		<img src="../../static/image/loading.jpg" style="width:100%;height:100%;" alt="">
-		<div class="init">
-			<div >
-				<span v-if="initStates.getUser==='warn'">获取用户数据中……</span>
-				<span v-else-if="initStates.getUser==='success'">获取用户数据完毕</span>
-				<span v-if="initStates.getUser==='warn'">获取用户数据失败</span>
+		<div class="init flex YcenterXcenter">
+			<div>
+				<span v-if="initStates.getStore==='warn'" style="color:#007AFF">获取应用数据中……</span>
+				<span v-else-if="initStates.getStore==='success'" style="color:#4CD964">获取应用数据完毕</span>
+				<span v-else-if="initStates.getStore==='error'" style="color:red">获取应用数据失败</span>
 			</div>
-			<div >
-				<span v-if="initStates.getSystem==='warn'">获取系统设置中……</span>
-				<span v-else-if="initStates.getSystem==='success'">获取系统设置完毕</span>
-				<span v-if="initStates.getSystem==='warn'">获取系统设置失败</span>
+			<div>
+				<span v-if="initStates.getSystem==='warn'" style="color:#007AFF">获取系统设置中……</span>
+				<span v-else-if="initStates.getSystem==='success'" style="color:#4CD964">获取系统设置完毕</span>
+				<span v-else-if="initStates.getSystem==='error'" style="color:red">获取系统设置失败</span>
+			</div>
+			<div>
+				<span v-if="initStates.getSystem==='warn'" style="color:#007AFF">获取系统设置中……</span>
+				<span v-else-if="initStates.getSystem==='success'" style="color:#4CD964">获取系统设置完毕</span>
+				<span v-else-if="initStates.getSystem==='error'" style="color:red">获取系统设置失败</span>
 			</div>
 		</div>
 	</div>
@@ -36,18 +41,18 @@
 	export default {
 		data() {
 			return {
-				show:false,
+				show: false,
 				loading: true,
-				initStates:{
-					getStore:'warn',
-					getUser:'warn',
-					getSystem:'warn'
+				initStates: {
+					getStore: 'warn',
+					getUser: 'warn',
+					getSystem: 'warn'
 				}, // 加载状态
 			};
 		},
 
 		computed: {
-			...mapState(['user', 'locking', 'desktops', 'stores','initStates'])
+			...mapState(['user', 'locking', 'desktops', 'stores'])
 		},
 		components: {
 			bottomBar,
@@ -64,40 +69,39 @@
 				this.$store.commit('locking', true);
 			}
 			// 查询商店应用
-			let checkApi1=await this.$store.dispatch('getStoreApi')
-			console.log(checkApi1,'查询商店应用')
-			this.initStates.getStore=checkApi1?'success':'error'
+			let checkApi1 = await this.$store.dispatch('getStoreApi')
+			console.log(checkApi1, '查询商店应用')
+			this.initStates.getStore = checkApi1 ? 'success' : 'error'
 			// 查询用户信息
-			let checkApi2=await this.$store.dispatch('getUserApi')
-			console.log(checkApi2,'查询用户信息')
-			this.initStates.getUser=checkApi2?'success':'error'
+			let checkApi2 = await this.$store.dispatch('getUserApi')
+			console.log(checkApi2, '查询用户信息')
+			this.initStates.getUser = checkApi2 ? 'success' : 'error'
 			// 查询系统设置
-			let checkApi3=await this.$store.dispatch('getSystemApi')
-			console.log(checkApi3,'查询系统设置')
-			this.initStates.getSystem=checkApi3?'success':'error'
+			let checkApi3 = await this.$store.dispatch('getSystemApi')
+			console.log(checkApi3, '查询系统设置')
+			this.initStates.getSystem = checkApi3 ? 'success' : 'error'
 			// 请求完成后显示桌面
-			if(!checkApi1||!checkApi2||!checkApi3){
-				this.show=false
+			if (!checkApi1 || !checkApi2 || !checkApi3) {
+				this.show = false
 				return
 			}
-			return
-			this.show=true
-			
+			this.show = true
+
 			// 图标从上到下摆放8个  90高一个
 			let user = this.Web_api.clone(this.user)
-			user.shortcutList.forEach((item, index) => {
-				user.shortcutList[index] = this.stores.find(item2 => item2.app_id == item)
-				user.shortcutList[index].id = index
-			})
+			// user.shortcutList.forEach((item, index) => {
+			// 	user.shortcutList[index] = this.stores.find(item2 => item2.app_id == item)
+			// 	user.shortcutList[index].id = index
+			// })
 			// 写入vuex
 			this.$store.commit('updateUser', user);
 		},
 		mounted() {
-			
+
 		},
 		async onLoad() {
-			
-			
+
+
 		},
 		methods: {
 			bindDesktop() {
@@ -111,7 +115,7 @@
 			SortChange(e) {
 				console.log(e)
 			},
-			
+
 		}
 	};
 </script>
@@ -120,24 +124,31 @@
 	uni-page-body {
 		height: 100%;
 	}
+
 	.loading {
 		width: 100%;
 		height: 100vh;
+
 		.init {
 			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
 			width: 300px;
 			height: 100px;
 			// z-index: 1000;
-			background-color: #ccc;
+			background-color: #dcdddf40;
 		}
-		
-	}
-	.gradient{
-	    // background-image: -moz-linear-gradient(top, #8fa1ff, #3757fa)!important; /* Firefox */
-	    // background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #2a5d9e), color-stop(1, #4f8fc5))!important; /* Saf4+, Chrome */
-	    // filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c6ff00', endColorstr='#538300', GradientType='0')!important; /* IE*/
-	}
 	
+
+	}
+
+	.gradient {
+		// background-image: -moz-linear-gradient(top, #8fa1ff, #3757fa)!important; /* Firefox */
+		// background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #2a5d9e), color-stop(1, #4f8fc5))!important; /* Saf4+, Chrome */
+		// filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c6ff00', endColorstr='#538300', GradientType='0')!important; /* IE*/
+	}
+
 	.desktop {
 		width: 100%;
 		height: 100vh;

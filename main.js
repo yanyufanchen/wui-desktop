@@ -10,7 +10,8 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition)
 import 'element-ui/lib/theme-chalk/display.css' // elment
 import 'font-awesome/css/font-awesome.min.css' // font
-
+// 全局自动注册应用组件
+import './global.js'
 import './static/css/iconfont.css'
 
 // #ifndef VUE3
@@ -20,6 +21,10 @@ Vue.prototype.$store = store
 import { Loading } from 'element-ui';
 Vue.prototype.Loading = Loading
 Vue.use(ElementUI)
+
+
+
+
 
 
 App.mpType = 'app'

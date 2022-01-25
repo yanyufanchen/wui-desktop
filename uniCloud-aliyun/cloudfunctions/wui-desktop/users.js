@@ -1,3 +1,14 @@
+// 生成随机字符串
+function randomString(len) {
+	len = len || 32;
+	var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+	var maxPos = $chars.length;
+	var pwd = '';
+	for (let i = 0; i < len; i++) {
+		pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+	}
+	return pwd;
+}
 // 登录--
 exports.login = async (db, event, context) => {
 	const collection = db.collection('users')
@@ -18,17 +29,7 @@ exports.login = async (db, event, context) => {
 			mes: '账号或密码错误'
 		}
 	}
-	// 生成随机字符串
-	function randomString(len) {
-		len = len || 32;
-		var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-		var maxPos = $chars.length;
-		var pwd = '';
-		for (let i = 0; i < len; i++) {
-			pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-		}
-		return pwd;
-	}
+
 	const token = randomString(32)
 	// 写入token
 	var res = await collection.doc(user._id).update({
@@ -56,21 +57,36 @@ exports.checkToken = async (db, event, context) => {
 	if (res.data.length == 0) {
 		return {
 			status: false,
-			code:401,
+			code: 401,
 			mes: '验证失败'
 		}
 	}
 	return {
 		status: true,
-		code:200,
+		code: 200,
 		mes: '验证成功'
 	}
 }
 // 新增账户
 exports.addAccount = async (db, event, context) => {
 	const collection = db.collection('users')
-	var res = await collection.add(event)
-
+	const token = randomString(32)
+	var res = await collection.add({
+		'username': event.data.username,
+		'password': event.data.password,
+		'creattime': new Date(),
+		'status': '访客', // 访客，管理员
+		'token': token,
+		'lowerMenu': [],
+		'myappList': [],
+		'shortcutList': [],
+		'systemData': {
+			"color": "#14173a", // 主题颜色
+			"wallpapers": [], // 壁纸库
+			"wallpaper": 1 // 壁纸序号
+		},
+		'wuiModals': []
+	})
 	return {
 		status: true,
 		mes: '新增成功'
@@ -140,6 +156,17 @@ exports.updateAccount = async (db, event, context) => {
 		mes: '修改成功'
 	}
 }
+// 通过id修改指定账户
+exports.updateUser = async (db, event, context) => {
+	const collection = db.collection('users')
+	var res = await collection.where({
+		_id: event._id
+	}).update(event.data)
+	return {
+		status: true,
+		mes: '修改成功'
+	}
+}
 // 修改密码
 exports.editPassword = async (db, event, context) => {
 	const collection = db.collection('users')
@@ -156,7 +183,7 @@ exports.editPassword = async (db, event, context) => {
 	var res = await collection.where({
 		token: event.token
 	}).update({
-		password:event.data.newPassword
+		password: event.data.newPassword
 	})
 	return {
 		status: true,

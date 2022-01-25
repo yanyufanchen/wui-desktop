@@ -7,11 +7,7 @@ const store = new Vuex.Store({
 		token:'',
 		user: {}, // 登录状态
 		locking:false, // 锁定状态
-		initStates:{
-			getStore:'warn',
-			getUser:'warn',
-			getSystem:'warn'
-		}, // 加载状态
+		
 		
 		
 		systems:{},// 系统设置
@@ -19,22 +15,20 @@ const store = new Vuex.Store({
 		stores:{}, // 应用商店
 		
 		
-		isCollapse: false ,// 菜单栏状态
-		themeColor: '#409EFF', // 后台element默认主题色
-		articleObj: {}, // 当前编辑的文章
-		logObj: {}, // 当前编辑的日志
-		Desktheme: {
-			ThemeColor: '#409EFF'
-		}, // 前台element默认主题色
-		sTitle: '基于uniCloud云开发平台而生的全栈博客项目',
-		headerBgimg: '',
-		count: '', // 网站访问量
-		mymessage:'' // 我的基本信息
+		// isCollapse: false ,// 菜单栏状态
+		// themeColor: '#409EFF', // 后台element默认主题色
+		// articleObj: {}, // 当前编辑的文章
+		// logObj: {}, // 当前编辑的日志
+		// Desktheme: {
+		// 	ThemeColor: '#409EFF'
+		// }, // 前台element默认主题色
+		// sTitle: '基于uniCloud云开发平台而生的全栈博客项目',
+		// headerBgimg: '',
+		// count: '', // 网站访问量
+		// mymessage:'' // 我的基本信息
 	},
 	mutations: {
-		initState(state, data){
-			state.initStates=data
-		},
+		
 		// 登录
 		login(state, data) { // 登录状态存全局
 			state.token = data.token

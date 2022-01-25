@@ -15,7 +15,11 @@
   "dependencies": {
     "element-ui": "^2.15.6",
     "font-awesome": "^4.7.0",
+    "jshint": "^2.13.4",
+    "jsonlint": "^1.6.3",
     "mui-player": "^1.6.0",
-    "mui-player-desktop-plugin": "^1.4.1"
+    "mui-player-desktop-plugin": "^1.4.1",
+    "script-loader": "^0.7.2",
+    "vue-codemirror": "^4.0.6"
   }
 }

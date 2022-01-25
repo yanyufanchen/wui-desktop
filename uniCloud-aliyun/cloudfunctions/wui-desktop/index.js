@@ -17,6 +17,13 @@ exports.main = async (event, context) => {
 		}
 		return await users.checkAccount(db, event.event, context)
 	}
+	if (event.model == 'addAccount') { // 新增用户
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await users.addAccount(db, event.event, context)
+	}
 	if (event.model == 'getAccountDetail') { // 查询用户信息
 		let checkToken = await users.checkToken(db, event.event, context)
 		if (!checkToken.status) {
@@ -30,6 +37,13 @@ exports.main = async (event, context) => {
 			return checkToken
 		}
 		return await users.updateAccount(db, event.event, context)
+	}
+	if (event.model == 'updateUser') { // 通过id修改指定用户
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await users.updateUser(db, event.event, context)
 	}
 	if (event.model == 'editPassword') { // 修改用户密码
 		let checkToken = await users.checkToken(db, event.event, context)
@@ -67,6 +81,27 @@ exports.main = async (event, context) => {
 			return checkToken
 		}
 		return await systemStores.getSystemStores(db, event.event, context)
+	}
+	if (event.model == 'addSystemStores') { // 新增应用
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await systemStores.addSystemStores(db, event.event, context)
+	}
+	if (event.model == 'updateSystemStores') { // 修改应用
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await systemStores.updateSystemStores(db, event.event, context)
+	}
+	if (event.model == 'deleteSystemStores') { // 删除应用
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await systemStores.deleteSystemStores(db, event.event, context)
 	}
 	// 通用方法
 

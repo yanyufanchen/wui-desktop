@@ -24,16 +24,10 @@
 			</div>
 		</div>
 		<div class="main">
-				<!-- 需要配置到应用的 -->
-				<browser v-if="options.item.app_id==='wui-browser'" :options="options" />
-				<computer v-else-if="options.item.app_id==='wui-my-computer'" :options="options" />
-				<appStore v-else-if="options.item.app_id==='wui-app-store'" :options="options" />
-				<!-- 查看器 -->
-				<fileViewer v-else-if="options.item.app_id==='wui-fileViewer'" :options="options" />
-				<!-- 系统设置 -->
-				<system v-if="options.item.app_id=='wui-system'" :options="options" />
-			
-			
+			<!-- 需要配置到应用的 -->
+			<keep-alive>
+				<component :is="options.item.app_id"  :options="options"></component>
+			</keep-alive>
 		</div>
 	</div>
 </template>
@@ -42,11 +36,6 @@
 	import {
 		mapState
 	} from 'vuex';
-	import browser from '@/components/modalContent/browser.vue'
-	import computer from '@/components/modalContent/computer/index.vue'
-	import appStore from '@/components/modalContent/appStore.vue'
-	import fileViewer from '@/components/modalContent/fileViewer/index.vue'
-	import system from '@/components/modalContent/system/index.vue'
 	export default {
 		name: 'wuimodal', // 应用弹框
 		data() {
@@ -68,11 +57,6 @@
 			...mapState(['systems', 'stores', 'user'])
 		},
 		components: {
-			browser,
-			computer,
-			appStore,
-			fileViewer,
-			system
 		},
 		mounted() {
 			this.setModalSize()
@@ -87,12 +71,12 @@
 				// 点击,将当前项排到最后一位，目的是置顶
 				let user = this.Web_api.clone(this.user)
 				let maxIndex = this.Web_api.getArrMaxValue(user.wuiModals, 'zIndex')
-				let active=user.wuiModals.find(item=>item.zIndex===maxIndex)
+				let active = user.wuiModals.find(item => item.zIndex === maxIndex)
 				// 如果点击的是最顶层,就不执行
-				if(this.options.item.app_id===active.app_id)return
+				if (this.options.item.app_id === active.app_id) return
 				user.wuiModals.forEach(item => {
 					if (item.id === this.options.item.id) {
-						item.zIndex = maxIndex+1
+						item.zIndex = maxIndex + 1
 					}
 				})
 				// 写入vuex
@@ -127,20 +111,20 @@
 			// 工具栏
 			selectTools(type) {
 				if (type === 1) { // 折叠
-					this.Utils.setModalHide(this,this.options.item)
+					this.Utils.setModalHide(this, this.options.item)
 				}
 				if (type === 2) { // 放大缩小
 					this.size = this.size == 0.8 ? 1 : 0.8
 					this.setModalSize()
 				}
 				if (type === 3) { // 关闭
-				let user = this.Web_api.clone(this.user)
-					user.wuiModals= user.wuiModals.filter(item => item.id !== this.options.item.id)
+					let user = this.Web_api.clone(this.user)
+					user.wuiModals = user.wuiModals.filter(item => item.id !== this.options.item.id)
 					// 写入vuex
 					this.$store.dispatch('setUserApi', user);
 				}
 			},
-			
+
 			// 设置窗口大小
 			setModalSize() {
 				// 判断是否是自定义大小

@@ -1,11 +1,11 @@
 <template>
 	<div class="desktopIcons" :style="{'backgroundImage':`url(${[...systems.wallpapers,...user.systemData.wallpapers].find(item=>item.id===user.systemData.wallpaper).url})`}">
-		<div class="shortcut flex YcenterXcenter" v-for="item in user.shortcutList" :key="item.id"
-			 @dblclick="openModal(item)">
-			<div class="icon" :style="{'backgroundColor':item.backgroundColor}">
-				<i class="fa fa-lg" :class="item.icon"></i>
+		<div class="shortcut flex YcenterXcenter" v-for="item in user.shortcutList" :key="item"
+			 @dblclick="openModal(stores.find(item2 => item2.app_id == item))">
+			<div class="icon" :style="{'backgroundColor':stores.find(item2 => item2.app_id == item).backgroundColor}">
+				<i class="fa fa-lg" :class="stores.find(item2 => item2.app_id == item).icon"></i>
 			</div>
-			<div class="title">{{item.title}}</div>
+			<div class="title">{{stores.find(item2 => item2.app_id == item).title}}</div>
 		</div>
 	</div>
 </template>
@@ -19,7 +19,7 @@
 			return {};
 		},
 		computed: {
-			...mapState(['user','systems'])
+			...mapState(['user','systems','stores'])
 		},
 		components: {
 

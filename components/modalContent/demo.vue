@@ -1,6 +1,6 @@
 <template>
-	<div class="userlist">
-		用户列表
+	<div class="applylist">
+		应用列表
 	</div>
 </template>
 
@@ -9,7 +9,7 @@
 		mapState
 	} from 'vuex';
 	export default {
-		name:'userlist',
+		name:'applylist',
 		props: {
 			options: {}
 		},

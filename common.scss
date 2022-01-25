@@ -16,6 +16,11 @@
 	justify-content: flex-start;
 	align-items: center;
 }
+// 水平 右 中
+.XrightYcenter {
+	justify-content: flex-end;
+	align-items: center;
+}
 // 水平 中 上
 // 水平 中 下
 
@@ -123,3 +128,21 @@
 	z-index: 0!important;
 	background:none!important;
 }
+
+// 代码编辑样式
+.CodeMirror{
+	flex-grow: 1;
+	z-index: 1;
+	  .CodeMirror-code{
+	  	  line-height: 19px;
+	    }
+	  .code-mode-select{
+	  	position: absolute;
+	  	z-index: 2;
+	  	right: 10px;
+	  	top: 10px;
+	  	max-width: 130px;
+	  }
+}
+      
+      

@@ -39,7 +39,7 @@ let stores = [{
 						icon: 'fa-desktop',
 						customSize: false, // false代表不自定义大小  如果为true,需要通过style来配置宽高
 						backgroundColor: 'rgb(194, 187, 183，0.3)',
-						type: 'systemApp', // systemApp代表系统应用, webApp代表自定义应用 ，webpage代表网页应用
+						type: 'systemApp', // systemApp代表系统应用, webApp代表自定义应用 ，webPage代表网页应用
 					},
 					{
 						app_id: 'wui-calculator',
