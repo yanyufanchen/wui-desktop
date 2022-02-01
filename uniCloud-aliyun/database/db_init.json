@@ -171,6 +171,24 @@
 				"description":"该应用是系统设置。"
 			}
 		]
+	},
+	// 意见反馈列表
+	"feedbacks": {
+		"data": [
+			{
+				"createTime":"Tue Feb 01 2022 15:00:32 GMT+0800 (中国标准时间)",
+				"userId":"61d934d3c1f887000177c3c9",
+				"type":"issue", // issue 发布 waiting 待审核 delete 删除
+				"title":"需求:web聊天工具",
+				"content":"增加web聊天工具，让云桌面用户增加互动性！"
+			},{
+			"createTime":"Tue Feb 01 2022 15:00:32 GMT+0800 (中国标准时间)",
+			"userId":"61ee4239432b160001cee321",
+			"type":"waiting", // issue 发布 waiting 待审核 delete 删除
+			"title":"做的不错！！！",
+			"content":"CIY到此一游！！！"
+		}
+		]
 	}
 
 

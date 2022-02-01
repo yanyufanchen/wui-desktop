@@ -14,7 +14,6 @@ export default class Utils {
 		static GetUrlByParamName(name) {
 			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 			var URL = decodeURI(window.location.href.split('?'));
-			// console.log(URL,1212)
 			var r = URL.substr(1).match(reg);
 			if (r != null) {
 				//decodeURI() 函数可对 encodeURI() 函数编码过的 URI 进行解码
@@ -85,13 +84,16 @@ export default class Utils {
 		that.$store.dispatch('setUserApi',user)
 	}
 	// 置顶当前弹窗
-	static setModalTop(that,active){
+	static setModalTop(that,active,defaultObj){
 		let user = that.Web_api.clone(that.user)
 		let maxIndex = that.Web_api.getArrMaxValue(user.wuiModals, 'zIndex') + 1
 		user.wuiModals.forEach(item => {
 			if (item.id === active.id) {
 				item.zIndex = maxIndex + 1
 				item.show_flag = true
+				if(defaultObj){
+					item.data=defaultObj.data
+				}
 			}
 		})
 		// 写入vuex
@@ -103,7 +105,7 @@ export default class Utils {
 		let activeApp=user.wuiModals.find(item=>item.app_id==active.app_id)
 		if(activeApp){
 			// 置顶显示
-			that.Utils.setModalTop(that, activeApp)
+			that.Utils.setModalTop(that, activeApp,defaultObj)
 			
 		}else{
 			user.wuiModals.push({

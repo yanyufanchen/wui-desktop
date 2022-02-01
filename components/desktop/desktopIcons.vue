@@ -1,11 +1,11 @@
 <template>
-	<div class="desktopIcons" :style="{'backgroundImage':`url(${[...systems.wallpapers,...user.systemData.wallpapers].find(item=>item.id===user.systemData.wallpaper).url})`}">
-		<div class="shortcut flex YcenterXcenter" v-for="item in user.shortcutList" :key="item"
-			 @dblclick="openModal(stores.find(item2 => item2.app_id == item))">
-			<div class="icon" :style="{'backgroundColor':stores.find(item2 => item2.app_id == item).backgroundColor}">
-				<i class="fa fa-lg" :class="stores.find(item2 => item2.app_id == item).icon"></i>
+	<div class="desktopIcons" :style="{'backgroundImage':`url(${findWallpaper()})`}">
+		<div class="shortcut flex YcenterXcenter" v-for="item in user.myappList" :key="item.app_id"
+			 @dblclick="openModal(stores.find(item2 => item2.app_id == item.app_id))">
+			<div class="icon" :style="{'backgroundColor':stores.find(item2 => item2.app_id == item.app_id).backgroundColor}">
+				<i class="fa fa-lg" :class="stores.find(item2 => item2.app_id == item.app_id).icon"></i>
 			</div>
-			<div class="title">{{stores.find(item2 => item2.app_id == item).title}}</div>
+			<div class="title">{{stores.find(item2 => item2.app_id == item.app_id).title}}</div>
 		</div>
 	</div>
 </template>
@@ -31,6 +31,15 @@
 				this.Utils.openModal(this,active,{
 					data:{}
 				})
+			},
+			findWallpaper(){
+				let list=[...this.systems.wallpapers,...this.user.systemData.wallpapers]
+				let itemActive=list.find(item=>item.id===this.user.systemData.wallpaper)
+				if(itemActive){
+					return itemActive.url
+				}else{
+					return this.systems.wallpapers[0].url
+				}
 			}
 		}
 	};

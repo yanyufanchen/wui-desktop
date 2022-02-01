@@ -193,7 +193,6 @@ export default {
       lowerMenuUserFlag: false, // 左侧菜单用户栏
       sidebarWidth: "48px", // 左侧菜单工具栏宽度控制
       drawerNewsWidth: "0px", // 右侧菜单消息抽提栏控制
-
       appModalBarWidth: 180,
     };
   },
@@ -204,7 +203,6 @@ export default {
     sCalendar,
   },
   onLoad() {
-    // console.log(this.$store.user,'启动')
   },
   methods: {
     showLowerMenu() {

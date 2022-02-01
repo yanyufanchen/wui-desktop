@@ -119,11 +119,12 @@
 					user.myappList.push({
 						app_id: item.app_id,
 						data: item.default,
-						id: user.myappList[user.myappList.length - 1].id + 1,
+						id: new Date().getTime(),
 						installtime:new Date()
 
 					})
-					this.$store.commit('updateUser', user);
+					// 写入vuex
+					this.$store.dispatch('setUserApi', user);
 				}).catch(() => {});
 			},
 			// 卸载app

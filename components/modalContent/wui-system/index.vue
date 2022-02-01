@@ -101,6 +101,12 @@
 					</el-dialog>
 				</div>
 				<div class="contentBoxItem">
+					<div class="title">个人主题色</div>
+					<el-color-picker :value="user.systemData.color" @active-change="selectUserSystem($event,'color')" show-alpha
+						:predefine="predefineColors">
+					</el-color-picker>
+				</div>
+				<div class="contentBoxItem">
 					<div class="title">个人壁纸</div>
 					<wallpaper type="user" @addWallpaper="selectUserSystem($event,'addWallpaper')"
 						@selectWallpaper="selectUserSystem($event,'selectWallpaper')" />
@@ -108,11 +114,11 @@
 			</div>
 			<!-- 其他 -->
 			<div class="contentBox" v-if="tabsList[activeIndex].id===5">
-
+				<otherview />
 			</div>
 			<!-- 关于 -->
 			<div class="contentBox" v-if="tabsList[activeIndex].id===6">
-
+				<about />
 			</div>
 		</div>
 	</div>
@@ -125,6 +131,8 @@
 	import wallpaper from './wallpaper/wallpaper.vue'
 	import userlist from './userlist/userlist.vue'
 	import applylist from './applylist/applylist.vue'
+	import about from './about/about.vue'
+	import otherview from './otherview/otherview.vue'
 	export default {
 		name: 'wui-system',
 		props: {
@@ -135,32 +143,38 @@
 				tabsList: [{
 						id: 1,
 						icon: 'fa-home',
-						name: '主页'
+						name: '主页',
+						type:'system-home'
 					},
 					{
 						id: 2,
 						icon: 'fa-tasks',
-						name: '应用设置'
+						name: '应用设置',
+						type:'system-apply'
 					},
 					{
 						id: 3,
 						icon: 'fa-user',
-						name: '用户设置'
+						name: '用户设置',
+						type:'system-user'
 					},
 					{
 						id: 4,
 						icon: 'fa-address-card-o',
-						name: '个人设置'
+						name: '个人设置',
+						type:'system-me'
 					},
 					{
 						id: 5,
 						icon: 'fa-pencil',
-						name: '其他'
+						name: '其他',
+						type:'system-other'
 					},
 					{
 						id: 6,
 						icon: 'fa-info-circle',
-						name: '关于'
+						name: '关于',
+						type:'system-about'
 					},
 				],
 				activeIndex: 0,
@@ -232,12 +246,24 @@
 		components: {
 			wallpaper,
 			userlist,
-			applylist
+			applylist,
+			otherview,
+			about
 		},
 		computed: {
 			...mapState(['stores', 'systems', 'user'])
 		},
+		watch:{
+			options(newV,oldV){ // 监听其他组件超控tab切换
+				if(newV.item.data.type!==oldV.item.data.type){
+					this.activeIndex=this.tabsList.findIndex(item=>item.type===newV.item.data.type)
+				}
+			}
+		},
 		async created() {
+			
+		},
+		beforeUpdate() {
 			
 		},
 		mounted() {
@@ -297,7 +323,6 @@
 							}
 						}
 					});
-					console.log(res, 'res')
 					if (!res.status) {
 						this.$message.error('修改密码失败')
 					}

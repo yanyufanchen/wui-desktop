@@ -4,6 +4,7 @@ const db = uniCloud.database()
 let users = require('./users.js') // 用户
 let systemData = require('./systemData.js') // 系统设置
 let systemStores = require('./systemStores.js') // 系统应用商店
+let feedbacks = require('./feedbacks.js') // 系统反馈建议
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	// users
@@ -102,6 +103,28 @@ exports.main = async (event, context) => {
 			return checkToken
 		}
 		return await systemStores.deleteSystemStores(db, event.event, context)
+	}
+	// 系统反馈建议
+	if (event.model == 'getFeedbacks') { // 查询系统反馈建议
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await feedbacks.getFeedbacks(db, event.event, context)
+	}
+	if (event.model == 'addFeedbacks') { // 添加系统反馈建议
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await feedbacks.addFeedbacks(db, event.event, context)
+	}
+	if (event.model == 'updateFeedbacks') { // 修改系统反馈建议
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await feedbacks.updateFeedbacks(db, event.event, context)
 	}
 	// 通用方法
 

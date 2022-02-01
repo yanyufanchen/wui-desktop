@@ -8,24 +8,10 @@ const store = new Vuex.Store({
 		user: {}, // 登录状态
 		locking:false, // 锁定状态
 		
-		
-		
 		systems:{},// 系统设置
 		desktops:{}, // 桌面
 		stores:{}, // 应用商店
-		
-		
-		// isCollapse: false ,// 菜单栏状态
-		// themeColor: '#409EFF', // 后台element默认主题色
-		// articleObj: {}, // 当前编辑的文章
-		// logObj: {}, // 当前编辑的日志
-		// Desktheme: {
-		// 	ThemeColor: '#409EFF'
-		// }, // 前台element默认主题色
-		// sTitle: '基于uniCloud云开发平台而生的全栈博客项目',
-		// headerBgimg: '',
-		// count: '', // 网站访问量
-		// mymessage:'' // 我的基本信息
+		feedbacks:[], // 反馈建议
 	},
 	mutations: {
 		
@@ -132,7 +118,8 @@ const store = new Vuex.Store({
 					data:{	
 						color:data.color,					
 						wallpaper:data.wallpaper,				
-						wallpapers:data.wallpapers
+						wallpapers:data.wallpapers,
+						otherList:data.otherList
 					}
 				}
 			});
@@ -152,6 +139,8 @@ const store = new Vuex.Store({
 			commit('updateStore', res.data, { root: true }) // 重点
 			return true
 		},
+		
+		
 	}
 })
 

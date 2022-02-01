@@ -2,7 +2,7 @@
 	<div class="wallpaper">
 		<div class="activeWallpaper">
 			<img v-if="type==='system'" :src="systems.wallpapers.find(item=>item.id===systems.wallpaper).url" alt="">
-			<img v-else="type==='user'" :src="[...systems.wallpapers,...user.systemData.wallpapers].find(item=>item.id===user.systemData.wallpaper).url" alt="">
+			<img v-else="type==='user'" :src="[...systems.wallpapers,...user.systemData.wallpapers].find(item=>item.id===user.systemData.wallpaper)&&[...systems.wallpapers,...user.systemData.wallpapers].find(item=>item.id===user.systemData.wallpaper).url" alt="">
 		</div>
 		<div class="addWallpaper">
 			<el-input style="width:300px;margin-right:5px" v-model="wallpaperUrl" placeholder="在线添加壁纸"></el-input>
