@@ -255,6 +255,8 @@
 		},
 		watch:{
 			options(newV,oldV){ // 监听其他组件超控tab切换
+			console.log(newV.item.data.type)
+			console.log(oldV.item.data.type)
 				if(newV.item.data.type!==oldV.item.data.type){
 					this.activeIndex=this.tabsList.findIndex(item=>item.type===newV.item.data.type)
 				}

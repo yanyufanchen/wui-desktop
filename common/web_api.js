@@ -30,6 +30,7 @@ export default class Web_api {
 		})
 		return newArr[newArr.length - 1][key]
 	}
+	// 计算文件大小
 	static toFriendlySize(byteSize) {
 		if (!Number.isNaN(byteSize)) {
 			if (byteSize < 1024) {
@@ -43,5 +44,14 @@ export default class Web_api {
 			}
 		}
 		return "EMPTY";
+	}
+	// 获取随即颜色 #ccc
+	static getRandomColor(){
+	    var rand = Math.floor(Math.random( ) * 0xFFFFFF).toString(16);
+	        if(rand.length == 6){
+	            return '#'+rand;
+	        }else{
+	            return Web_api.getRandomColor();
+	        }
 	}
 }

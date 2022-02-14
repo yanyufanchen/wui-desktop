@@ -3,10 +3,12 @@
 		<div class="time">{{currentTime}}</div>
 		<div class="date">{{currentDate}}</div>
 		<!-- 月份 -->
-		<view class="month">
-			<image src="./calendar-jiantou.png" mode="widthFix" @click="lastMonth"></image>
+		<view class="month" style="height: 40px;">
+			<img src="./calendar-jiantou.png" alt="" mode="widthFix" style="height: 20px;transform: rotateY(180deg);" @click="lastMonth">
+			<!-- <image src="./calendar-jiantou.png" mode="widthFix" style="height: 40px;" @click="lastMonth"></image> -->
 			<view>{{year+'.'+month}}</view>
-			<image src="./calendar-jiantou.png" mode="widthFix" @click="nextMonth"></image>
+			<img src="./calendar-jiantou.png" alt="" mode="widthFix" style="height: 20px;" @click="nextMonth">
+			<!-- <image src="./calendar-jiantou.png" mode="widthFix" style="height: 40px;"  @click="nextMonth"></image> -->
 		</view>
 		<!-- 周 -->
 		<view class="week">

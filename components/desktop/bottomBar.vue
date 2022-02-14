@@ -52,7 +52,7 @@
                     <slot>
                       <div
                         class="userSelect"
-                        :style="{ background: user.systemData.color }"
+                        :style="{ background: user.systemData.color }" style="cursor: pointer;"
                       >
                         <div class="userSelectItem" @click="userSelect(1)">
                           修改账户
@@ -135,7 +135,7 @@
       </div>
       <div class="right flex XcenterYcenter">
         <div class="date wui-icon">
-          <el-popover
+          <!-- <el-popover
             popper-class="popper-lowerDate"
             placement="bottom-end"
             width="294"
@@ -143,20 +143,21 @@
             :visible-arrow="false"
             v-model="lowerDateFlag"
           >
-            <div
-              class="icon flex YcenterXcenter wui-icon"
-              style="height: 40px; width: 80px"
-              slot="reference"
-            >
-              <div class="time">18:15</div>
-              <div class="yearDay">2021/12/16</div>
-            </div>
-            <slot>
-              <div class="dateBox" :style="{ background: user.systemData.color }">
-                <sCalendar />
-              </div>
-            </slot>
-          </el-popover>
+            
+          </el-popover> -->
+		  <div
+		    class="icon flex YcenterXcenter wui-icon"
+		    style="height: 40px; width: 80px;cursor: pointer;position: relative;"
+		    slot="reference" @click="cutDate"
+		  >
+		    <div class="time">18:15</div>
+		    <div class="yearDay">2021/12/16</div>
+		  </div>
+		  
+		    <div class="dateBox" :style="{ background: user.systemData.color }" v-if="lowerDateFlag" style="position: absolute;bottom:40px;right:0">
+		      <sCalendar />
+		    </div>
+		  
         </div>
         <div class="news wui-icon flex XcenterYcenter" @click="cutNews">
           <i class="fa fa-comment-o fa-lg"></i>
@@ -226,7 +227,7 @@ export default {
 			app_id:'wui-system'
 		},{
 		  	data:{
-		  		type:'system-user'
+		  		type:'system-me'
 		  	}
 		  })
       }
@@ -235,6 +236,10 @@ export default {
         this.$store.commit("locking", true);
       }
     },
+	cutDate(){
+		console.log('日期')
+		this.lowerDateFlag=!this.lowerDateFlag
+	},
 	systemSet(){
 		this.lowerMenuFlag=false
 		// 如果没有下载该应用,就无法查看
@@ -365,13 +370,18 @@ export default {
     background-color: #9e9e9e;
   }
 }
+// .right {
+// 	.date:hover {
+// 		.dateBox {
+// 			display: block;
+// 		}
+// 	}
+// }
 // 时间栏
 .dateBox {
-  width: 294px;
-  height: 450px;
-  position: relative;
-  // position: absolute;
-  right: -54px;
+  width: 350px;
+  height: 550px;
+  padding: 10px;
 }
 
 // 消息提醒

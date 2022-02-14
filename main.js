@@ -33,7 +33,8 @@ const app = new Vue({
 })
 app.$mount()
 // #endif
-
+import Web_api from './common/web_api.js'
+Vue.prototype.Web_api = Web_api
 import Uni from'./common/uni.js'
 Vue.prototype.Uni=Uni
 import Utils from './common/utils'
@@ -45,8 +46,7 @@ Api.VM=app // 将实例化挂载到api上
 Vue.prototype.Api = Api
 import drag from './common/drag';
 Vue.use(drag)
-import Web_api from './common/web_api.js'
-Vue.prototype.Web_api = Web_api
+
 const $BusEvent=new Vue()
 Vue.prototype.$BusEvent=$BusEvent
 // #ifdef VUE3

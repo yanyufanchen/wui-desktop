@@ -61,6 +61,8 @@
 			locking
 		},
 		async created() {
+			// console.log(111)
+			// return
 			this.$BusEvent.$on('initDesktop', () => {
 				this.bindDesktop()
 			})
