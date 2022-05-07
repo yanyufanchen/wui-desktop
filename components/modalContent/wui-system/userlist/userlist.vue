@@ -4,17 +4,25 @@
 			adduserVisible=true
 			userType='add'
 		}" style="margin-bottom:10px">添加用户</el-button>
+		<div class="userTabs">
+			<span style="display: inline-block;text-decoration: underline;padding: 10px;cursor: pointer;" 
+			:style="{'color':userTabType==item.type?user.systemData.color:'#aaa'}"
+			@click="()=>{userTabType=item.type;getUserlist()}"
+			v-for="item in [{name:'使用',type:'use'},{name:'审核',type:'waiting'},{name:'禁用',type:'stop'}]">{{item.name}}</span>
+		</div>
 		<el-table :data="userlist" border style="width: 100%">
-			<el-table-column fixed prop="creattime" label="创建日期">
+			<el-table-column fixed prop="creattime" label="创建日期" width="120">
 				<template slot-scope="scope">
 					<span>{{Time.formatTime(scope.row.creattime,'Y-M-D')}}</span>
 				</template>
 			</el-table-column>
 			<el-table-column prop="username" label="账号" width="120">
 			</el-table-column>
-			<el-table-column prop="password" label="密码" width="120">
+			<!-- <el-table-column prop="password" label="密码" width="120">
+			</el-table-column> -->
+			<el-table-column prop="status" label="身份" width="80">
 			</el-table-column>
-			<el-table-column prop="status" label="身份" width="120">
+			<el-table-column prop="type" label="状态" width="80">
 			</el-table-column>
 			<el-table-column fixed="right" label="操作" width="120">
 				<template slot-scope="scope">
@@ -34,12 +42,20 @@
 					<el-input style="width:100%;margin-bottom:5px" type="password" v-model="userfrom.password" placeholder="请输入新密码">
 					</el-input>
 				</el-form-item>
+				<el-form-item label="状态" prop="userType">
+					<el-radio-group v-model="radio">
+					    <el-radio label="use">使用</el-radio>
+					    <el-radio label="waiting">审核</el-radio>
+					    <el-radio label="stop">禁用</el-radio>
+					  </el-radio-group>
+				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="()=>{
 				adduserVisible = false
 				userfrom.username=''
 				userfrom.password=''
+				userfrom.userType='use'
 			}">取 消</el-button>
 				<el-button type="primary" @click="userApi">确 定</el-button>
 			</span>
@@ -58,10 +74,12 @@
 		},
 		data() {
 			return {
+				userTabType:'use',
 				userlist: [],
 				userfrom: {
 					username: '',
 					password: '',
+					userType:'use'
 				},
 				userType: 'add',
 				adduserVisible: false,
@@ -94,7 +112,7 @@
 			}
 		},
 		computed: {
-			// ...mapState(['desktops'])
+			...mapState(['user'])
 		},
 		async created() {
 			// 查询用户列表
@@ -109,6 +127,7 @@
 				const res = await this.Api.sendUniCloud({
 					model: 'getAccountList',
 					event: {
+						type:this.userTabType,
 						token: uni.getStorageSync('token')
 					}
 				});
@@ -131,7 +150,9 @@
 								token: uni.getStorageSync('token'),
 								data:{
 									username:this.userfrom.username,
-									password:this.userfrom.password
+									password:this.userfrom.password,
+									type:"use", // use 使用 waiting 审核 stop 禁用
+									comment:"无"
 								}
 							}
 						});

@@ -75,21 +75,22 @@ exports.addAccount = async (db, event, context) => {
 		'username': event.data.username,
 		'password': event.data.password,
 		'creattime': new Date(),
-		'status': '访客', // 访客，管理员
+		'status': '访客', // 访客,管理员
 		'token': token,
+		"type": event.data.type, // use 使用 waiting 审核 stop 禁用
+		"comment": event.data.comment, // 备注
 		'lowerMenu': [],
-		'myappList': [
-			{
-			    "app_id": "wui-app-store",
-			    "data": [],
-			    "installtime": "Fri Jan 07 2022 17:50:00 GMT+0800 (中国标准时间)",
-			    "id": 3
+		'myappList': [{
+				"app_id": "wui-app-store",
+				"data": [],
+				"installtime": "Fri Jan 07 2022 17:50:00 GMT+0800 (中国标准时间)",
+				"id": 3
 			},
 			{
-			    "app_id": "wui-system",
-			    "data": [],
-			    "id": 6,
-			    "installtime": "2022-01-19T01:56:04.900Z"
+				"app_id": "wui-system",
+				"data": [],
+				"id": 6,
+				"installtime": "2022-01-19T01:56:04.900Z"
 			}
 		],
 		'systemData': {
@@ -114,6 +115,8 @@ exports.getAccountList = async (db, event, context) => {
 		'shortcutList': false,
 		'systemData': false,
 		'wuiModals': false
+	}).where({
+		type: event.type
 	}).get()
 
 	return {

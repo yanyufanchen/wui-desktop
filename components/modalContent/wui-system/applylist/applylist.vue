@@ -38,7 +38,7 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item label="app_id" prop="title">
-					<el-input style="width:95%;" v-model="applyform.app_id" placeholder="请输入应用app_id">
+					<el-input style="width:95%;" v-model="applyform.app_id" :disabled="true" placeholder="请输入应用app_id">
 					</el-input>
 				</el-form-item>
 				<el-form-item label="应用类型" prop="type">
@@ -196,7 +196,7 @@
 			},
 
 			closeDrawer() {
-				console.log('关闭抽屉')
+				// console.log('关闭抽屉')
 				this.initApplyform()
 				this.$refs['applyform'].clearValidate()
 			},
@@ -206,8 +206,8 @@
 						console.log('error submit!!');
 						return false;
 					}
-					console.log(this.Type,'this.Type')
-					console.log(this.applyform,'this.applyform')
+					// console.log(this.Type,'this.Type')
+					// console.log(this.applyform,'this.applyform')
 					
 					if (this.Type === 'add') {
 						const res = await this.Api.sendUniCloud({

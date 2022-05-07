@@ -6,12 +6,14 @@
 	// 用户系统
 	"users": {
 		"data": [ // 数据
-			{	
+			{
 				"password": "123456",
 				"username": "admin",
-				"token":"xxx",
+				"token": "xxx",
 				"creattime": "Fri Jan 07 2022 17:50:00 GMT+0800 (中国标准时间)",
 				"status": "管理员",
+				"type":"use", // use 使用 waiting 审核 stop 禁用
+				"comment":"无", // 备注
 				"myappList": [{
 					"id": 1,
 					"app_id": "wui-my-computer",
@@ -52,7 +54,7 @@
 					"show_flag": true,
 					"zIndex": 3
 				}],
-				"systemData":{
+				"systemData": {
 					"color": "#14173a", // 主题颜色
 					"wallpapers": [], // 壁纸库
 					"wallpaper": 1 // 壁纸序号
@@ -127,10 +129,11 @@
 			// 	"type": "systemApp",
 			// 	"style": {},
 			// 	"default": {
-			// 		"list":[{
-			// 			"name": "搜狗搜索",
-			// 			"url": "https://www.sogou.com/"
-			// 		}]
+			// "list": [{
+			// 	"title": "主页",
+			// 	"url": "",
+			// 	"type": "home"
+			// }]
 			// 	},
 			// 	"description":"该应用是系统内置应用，用于网页的浏览和搜索。"
 			// }, 
@@ -168,27 +171,25 @@
 				"type": "systemApp",
 				"style": {},
 				"default": {},
-				"description":"该应用是系统设置。"
+				"description": "该应用是系统设置。"
 			}
 		]
 	},
 	// 意见反馈列表
 	"feedbacks": {
-		"data": [
-			{
-				"createTime":"Tue Feb 01 2022 15:00:32 GMT+0800 (中国标准时间)",
-				"userId":"61d934d3c1f887000177c3c9",
-				"type":"issue", // issue 发布 waiting 待审核 delete 删除
-				"title":"需求:web聊天工具",
-				"content":"增加web聊天工具，让云桌面用户增加互动性！"
-			},{
-			"createTime":"Tue Feb 01 2022 15:00:32 GMT+0800 (中国标准时间)",
-			"userId":"61ee4239432b160001cee321",
-			"type":"waiting", // issue 发布 waiting 待审核 delete 删除
-			"title":"做的不错！！！",
-			"content":"CIY到此一游！！！"
-		}
-		]
+		"data": [{
+			"createTime": "Tue Feb 01 2022 15:00:32 GMT+0800 (中国标准时间)",
+			"userId": "61d934d3c1f887000177c3c9",
+			"type": "issue", // issue 发布 waiting 待审核 delete 删除
+			"title": "需求:web聊天工具",
+			"content": "增加web聊天工具，让云桌面用户增加互动性！"
+		}, {
+			"createTime": "Tue Feb 01 2022 15:00:32 GMT+0800 (中国标准时间)",
+			"userId": "61ee4239432b160001cee321",
+			"type": "waiting", // issue 发布 waiting 待审核 delete 删除
+			"title": "做的不错！！！",
+			"content": "CIY到此一游！！！"
+		}]
 	}
 
 
