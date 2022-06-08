@@ -13,6 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
+    "docx-preview": "^0.1.11",
     "element-ui": "^2.15.6",
     "font-awesome": "^4.7.0",
     "jshint": "^2.13.4",
@@ -20,6 +22,7 @@
     "mui-player": "^1.6.0",
     "mui-player-desktop-plugin": "^1.4.1",
     "script-loader": "^0.7.2",
-    "vue-codemirror": "^4.0.6"
+    "vue-codemirror": "^4.0.6",
+    "xlsx": "^0.18.5"
   }
 }

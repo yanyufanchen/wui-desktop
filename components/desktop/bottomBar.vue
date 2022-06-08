@@ -266,7 +266,7 @@ export default {
       }).then(() => {
       	this.$store.commit('logout');
       	uni.redirectTo({
-      		url: "/pages/home/login"
+      		url: "/pages/login/index"
       	});
       }).catch(() => {});
     },

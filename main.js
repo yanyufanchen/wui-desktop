@@ -35,6 +35,9 @@ app.$mount()
 // #endif
 import Web_api from './common/web_api.js'
 Vue.prototype.Web_api = Web_api
+import config from './config.js'
+Vue.prototype.config = config
+window.config=config
 import Uni from'./common/uni.js'
 Vue.prototype.Uni=Uni
 import Utils from './common/utils'

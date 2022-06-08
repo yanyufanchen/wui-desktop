@@ -53,6 +53,7 @@
 										<div class="content_item_box_time" style="padding:0 10px">{{Time.formatTime(item.installtime,'Y-M-D')}}</div>
 									</div>
 									<div class="content_item_box_btn">
+										<span style="background:aqua;margin-right:5px" @click="updateData(item)">更新</span>
 										<span v-if="getActiveApp(item.app_id).type==='systemApp'">卸载</span>
 										<span v-else class="appBtn" @click="uninstall(item)">卸载</span>
 									</div>
@@ -118,7 +119,8 @@
 					let user = this.Web_api.clone(this.user)
 					user.myappList.push({
 						app_id: item.app_id,
-						data: item.default,
+						customData:null, // 私有化数据
+						default: item.default, // 系统数据
 						id: new Date().getTime(),
 						installtime:new Date()
 
@@ -139,8 +141,26 @@
 					user.myappList = user.myappList.filter(item2 => item2.app_id !== item.app_id)
 					this.$store.commit('updateUser', user);
 				}).catch(() => {});
+			},
+			// 更新app
+			updateData(item){
+				this.$confirm('确定要更新该应用吗?', this.getActiveApp(item.app_id).title, {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					// 将该应用数据写入user的应用列表
+					let user = this.Web_api.clone(this.user)
+					user.myappList.forEach(item2 => {
+						if(item2.app_id===item.app_id){
+							item2.default = this.getActiveApp(item.app_id).default
+						}
+					})
+					this.$store.commit('updateUser', user);
+					
+				}).catch(() => {});
 			}
-
+			
 		}
 	}
 </script>

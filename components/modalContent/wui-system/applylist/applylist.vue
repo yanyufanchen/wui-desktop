@@ -38,7 +38,7 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item label="app_id" prop="title">
-					<el-input style="width:95%;" v-model="applyform.app_id" :disabled="true" placeholder="请输入应用app_id">
+					<el-input style="width:95%;" v-model="applyform.app_id" :disabled="Type==='add'?false:true" placeholder="请输入应用app_id">
 					</el-input>
 				</el-form-item>
 				<el-form-item label="应用类型" prop="type">

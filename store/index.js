@@ -29,6 +29,7 @@ const store = new Vuex.Store({
 		logout(state) { // 退出清理登录状态
 			state.user = {}
 			uni.removeStorageSync('user')
+			uni.removeStorageSync('token')
 		},
 		// 锁定/解除锁定
 		locking(state,flag) {

@@ -1,18 +1,22 @@
-系统信息
-// 查询系统数据
-			let systems = {
-				color: '#14173a', // 统一颜色
-				wallpaper: 1, // 壁纸序号
-				wallpapers: [], // 壁纸
-			}
+### 系统信息
+#### 查询系统数据
+```
+let systems = {
+		color: '#14173a', // 统一颜色
+		wallpaper: 1, // 壁纸序号
+		wallpapers: [], // 壁纸
+	}
+```
 桌面数据			
+```
 let user = {
-				shortcutList: ['wui-my-computer', 'wui-app-store', 'wui-browser'], // 配置我的桌面快捷应用列表
-				wallpapers: [], // 壁纸库
-				lowerMenu: [], // 左下角菜单 // 关联 排序我的应用列表 可拖拽应用列表
-				myappList: [
-					app_id:"wui-my-computer",
-					data:{}, // 我的应用数据存储
+	shortcutList: ['wui-my-computer', 'wui-app-store', 'wui-browser'], // 配置我的桌面快捷应用列表
+	wallpapers: [], // 壁纸库
+	lowerMenu: [], // 左下角菜单 // 关联 排序我的应用列表 可拖拽应用列表
+	myappList: [
+		app_id:"wui-my-computer",
+					customData: {} // 弹窗配置私有参数
+					default: {} // 弹窗配置系统初始化数据
 					id:1,
 					installtime:"Fri Jan 07 2022 17:50:00 GMT+0800 (中国标准时间)"
 
@@ -23,7 +27,8 @@ let user = {
 						app_id: 'wui-my-computer',
 						show_flag: true,
 						zIndex: 2,
-						data: {} // 弹窗配置参数
+						customData: {} // 弹窗配置私有参数
+						default: {} // 弹窗配置系统初始化数据
 					}
 				],
 				systemData :{ // 用户自定义设置
@@ -32,6 +37,7 @@ let user = {
 					wallpapers: [], // 壁纸
 				}
 			}
+```
 应用商店
 let stores = [{
 						app_id: 'wui-my-computer',

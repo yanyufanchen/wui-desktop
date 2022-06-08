@@ -60,6 +60,13 @@ exports.main = async (event, context) => {
 		}
 		return await users.getAccountList(db, event.event, context)
 	}
+	if (event.model == 'removeAccount') { // 删除用户
+		let checkToken = await users.checkToken(db, event.event, context)
+		if (!checkToken.status) {
+			return checkToken
+		}
+		return await users.removeAccount(db, event.event, context)
+	}
 	// 系统设置
 	if (event.model == 'getSystemData') { // 查询系统设置
 		let checkToken = await users.checkToken(db, event.event, context)

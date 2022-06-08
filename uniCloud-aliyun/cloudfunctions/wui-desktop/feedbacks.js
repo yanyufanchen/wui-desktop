@@ -14,7 +14,10 @@ exports.getFeedbacks = async (db, event, context) => {
 	}).get()
 	const userList=userRes.data
 	feedbackList.length>0&&feedbackList.forEach(item=>{
-		item['username']=userList.find(item2=>item2._id==item.userId).username
+		let active=userList.find(item2=>item2._id==item.userId)
+		if(active){
+			item['username']=active.username
+		}
 	})
 	return {
 		status: true,

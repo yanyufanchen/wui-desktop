@@ -23,6 +23,7 @@
 		},
 		mounted() {
 			// 初始化 MuiPlayer 插件，MuiPlayer 方法传递一个对象，该对象包括所有插件的配置
+			console.log(this.src,'this.src')
 			var mp = new MuiPlayer({
 				container: '#mui-player',
 				title:this.name,

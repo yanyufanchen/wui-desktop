@@ -3,12 +3,12 @@
 		<div class="tool ">
 			<div class="tool_1 flex XleftYcenter" v-if="!selectId">
 				<el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/"
-					:disabled="crumbsList.length==1?true:false" :multiple="true" :limit="10" :on-change="upload"
+					:disabled="crumbsList.length==1?true:false" :multiple="false" :limit="10" :on-change="upload"
 					:show-file-list="false" :auto-upload="false">
 					<el-button slot="trigger" size="small" type="primary" :disabled="crumbsList.length==1?true:false">
 						上传文件</el-button>
 				</el-upload>
-				<!-- <el-button style="margin-left:5px" size="small" type="primary" plain :disabled="crumbsList.length==1?true:false">新建文件夹</el-button> -->
+				<el-button @click="addFolder" style="margin-left:5px" size="small" type="primary" plain :disabled="crumbsList.length==1?true:false">新建文件夹</el-button>
 			</div>
 			<div class="tool_2 flex XleftYcenter" v-else>
 				<el-button style="margin-left:5px" size="small" type="primary" plain
@@ -26,7 +26,7 @@
 		</div>
 		<div class="space">
 			<el-row :gutter="12">
-				<el-col :span="4" v-for="item in getActiveList(getoriginal_fileList(user))" :key="item.id">
+				<el-col :span="4" v-for="item in getActiveList(getcustomData(user).original_fileList)" :key="item.id">
 					<el-card shadow="click" :body-style="{ padding: '0px' }" style="cursor: default;margin-bottom:5px">
 						<el-tooltip placement="bottom" effect="light">
 							<div slot="content">
@@ -35,7 +35,7 @@
 								<div v-if="item.fileType!=='folder'">
 									大小：{{item.fileSize&&Web_api.toFriendlySize(item.fileSize)}}</div>
 								<div v-if="item.fileType!=='folder'">文件类型：{{item.fileType}}</div>
-								<div>文件名：{{item.name}}</div>
+								<div style="text-align: center;">文件名：{{item.name}}</div>
 							</div>
 							<div class="fileBox" @click.stop="selectFile(item)" @dblclick="openFile(item)"
 								:class="selectId===item.id?'active':''">
@@ -166,8 +166,8 @@
 		</div>
 		<div class="message">
 			<div class="title">空间</div>
-			<el-progress :text-inside="true" :stroke-width="25" :percentage="Number(((Api.computeStorageMax().userStorageNum/1024/1024)/(Api.computeStorageMax().systemStorageNum/1024/1024)*100).toFixed())"></el-progress>
-			<div class="text">{{(Api.computeStorageMax().userStorageNum/1024/1024).toFixed()}}M/{{(Api.computeStorageMax().systemStorageNum/1024/1024).toFixed()}}M</div>
+			<el-progress :text-inside="true" :stroke-width="25" :percentage="Number(((computeStorageMax().userStorageNum/1024/1024)/(computeStorageMax().systemStorageNum/1024/1024)*100).toFixed())"></el-progress>
+			<div class="text">{{(computeStorageMax().userStorageNum/1024/1024).toFixed()}}M/{{(computeStorageMax().systemStorageNum/1024/1024).toFixed()}}M</div>
 		</div>
 	</div>
 </template>
@@ -201,32 +201,51 @@
 			...mapState(['stores','user']),
 
 		},
-		created() {},
+		created() {
+			// 如果私有数据为null, 说明是初次进入应用,则进行初始化私有数据字段，并更新user
+			let user=this.Web_api.clone(this.user)
+			let app=user.myappList.find(app => app.app_id === this.options.item.app_id)
+			// let storeApp=this.stores.find(app => app.app_id === this.options.item.app_id)
+			if(!app.customData){
+				app.customData=app.default
+				// 写入vuex
+				this.$store.dispatch('setUserApi', user);
+			}
+		},
 		mounted() {
 		},
 		methods: {
+			computeStorageMax(){
+				let original_fileList=this.getcustomData(this.user).original_fileList
+				return this.Api.computeStorageMax(original_fileList)
+			},
 			// 获取当前数据
-			getoriginal_fileList(user) {
-				return user.myappList.find(item => item.app_id === this.options.item.app_id).data.original_fileList
+			getcustomData(user) {
+				let Data=null
+				let myapp=user.myappList.find(item => item.app_id === this.options.item.app_id)
+				if(!Data){
+					Data={
+						original_fileList:[]
+					}
+				}
+				Data=this.Web_api.clone(myapp.default)
+				Data.original_fileList.forEach(item=>{
+					let active=myapp.customData.original_fileList.find(item2=>item2.id===item.id)
+					if(active){
+						item.children=active.children
+					}
+				})
+				return Data
 			},
 			// 获取当前层级数据
 			getActiveList(list) {
 				let activeList = []
 				if (this.activeId === '') {
-					activeList = this.getoriginal_fileList(this.user)
+					activeList = this.getcustomData(this.user).original_fileList
 					return activeList
 				}
-				list.forEach(item => {
-					if (this.activeId === item.id) {
-						activeList = item.children
-					}
-					// 多层级
-					// if(item.fileType == "folder"&&item.children.length>0){
-					// 	this.getActiveList(item.children)
-					// }
-				})
+				activeList=this.setTree('item').children
 				return activeList
-
 			},
 			clickBlank(e) {
 				this.selectId = ''
@@ -234,10 +253,14 @@
 			// 上传
 			async upload(file, fileList) {
 				// 检测是否满足上传大小
-				this.Api.checkStorageMax(file.size)
+				let checkRes=this.Api.checkStorageMax(file.size)
+				if (!checkRes.status) {
+					this.$message.error(checkRes.mes)
+					return
+				}
 				file.url = URL.createObjectURL(file.raw)
 				// 将对象写入页面 同时上传 写入服务器
-				let activedata = this.getActiveList(this.getoriginal_fileList(this.user))
+				let activedata = this.getActiveList(this.getcustomData(this.user).original_fileList)
 				let id = `${this.activeId}-${activedata.length+1}`
 				let fileData = {
 					id: id,
@@ -268,7 +291,11 @@
 				if (item.id === '0') { // 最顶层
 					this.crumbsList = [item]
 					this.activeId = ''
+					return
 				}
+				let clickIndex=this.crumbsList.findIndex((item2=>item2.id===item.id))
+				this.crumbsList=this.crumbsList.filter((item2,index2)=>index2<=clickIndex)
+				this.activeId = item.id
 			},
 			// 返回
 			goBack() {
@@ -313,13 +340,13 @@
 					type: 'warning'
 				}).then(() => {
 					let user = this.Web_api.clone(this.user)
-					let activedata = this.getActiveList(this.getoriginal_fileList(user))
+					let activedata = this.getActiveList(this.getcustomData(user).original_fileList)
 					let fileUrl = activedata.find(item => item.id === this.selectId).fileUrl
 
 					// 写入vuex
 					let original_fileList = user.myappList[user.myappList.findIndex(item => item.app_id === this
 						.options.item
-						.app_id)].data.original_fileList
+						.app_id)].customData.original_fileList
 					let filelist = original_fileList[original_fileList.findIndex(item => item.id === this
 						.activeId)].children
 					for (var i = 0; i < filelist.length; i++) {
@@ -340,13 +367,58 @@
 					}
 				}).catch(() => {});
 
+			},
+			// 新建文件夹
+			addFolder(){
+				let activedata = this.getActiveList(this.getcustomData(this.user).original_fileList)
+				// 当前层级新增文件夹
+				let name=activedata.find(item=>item.name==='新建文件夹')?`新建文件夹_${new Date().getTime()}`:'新建文件夹'
+				let filefolder={
+					fileType: "folder",
+					id: `${this.activeId}-${activedata.length+1}`,
+					name: name,
+					children:[]
+				}
+				// 处理数据
+				this.setTree('add',filefolder)
+				
+			},
+			// 设置数据结构
+			setTree(type,filefolder){
+				let user=this.user
+				let active=null
+				let search=(tree)=>{
+					tree.children.forEach(item=>{
+						if(item.id===this.activeId){
+							if(type==='add'){
+								item.children.push(filefolder)
+								// 写入vuex
+								this.$store.dispatch('setUserApi', user);
+								return
+							}
+							if(type==='item'){
+								active=item
+								return
+							}
+						}else{
+							item.children&&search(item)
+						}
+					})
+				}
+				search({
+					id:'0',
+					children:this.getcustomData(this.user).original_fileList
+				})
+				return active
 			}
-
 		}
 	}
 </script>
 
 <style lang="less" scoped>
+	.text_hide {
+		text-align: center;
+	}
 	.computer {
 		height: 100%;
 		position: relative;

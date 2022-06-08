@@ -55,6 +55,19 @@
 // background: -moz-linear-gradient(right, transparent, #fff 55%);
 // background: linear-gradient(to right, transparent, #fff 55%);
 }
+.uni-video-video,#face_video {
+		width: 300px!important;
+		height: 400px!important;
+	}
+	.uni-video-toast {
+		display: none;
+	}
+	#face_canvas {
+		canvas {
+			width: 300px;
+			height: 400px;
+		}
+	}
 // elment组件
 // 底部栏左侧
 .el-popover {
@@ -144,5 +157,8 @@
 	  	max-width: 130px;
 	  }
 }
+
+
+
       
       

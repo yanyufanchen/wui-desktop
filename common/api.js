@@ -22,9 +22,25 @@ export default class Api {
 				if (res.result.code && res.result.code == 401) {
 					this.VM.$message.error('token失效，立即前往登录页面')
 					timeer = setTimeout(() => {
+						console.log('前往登录页面')
 						// 前往登录页面
 						uni.redirectTo({
-							url: "/pages/home/login"
+							url: "/pages/login/index"
+						});
+					}, 500)
+					if (flag) {
+						this.VM.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+							loadingInstance.close();
+						});
+					}
+					return
+				}
+				if (res.result.code && res.result.code == 501) {
+					this.VM.$message.error(res.result.mes)
+					timeer = setTimeout(() => {
+						// 前往登录页面
+						uni.redirectTo({
+							url: "/pages/login/index"
 						});
 					}, 500)
 					if (flag) {
@@ -84,11 +100,11 @@ export default class Api {
 		}
 	}
 	// 获取用户和系统存储量
-	static computeStorageMax(){
-		let maxStorage=100*1024*1024 // 100M
-		let filelist=this.VM.$store.state.user.myappList[0].data.original_fileList
+	static computeStorageMax(filelist){
+		// let maxStorage=100*1024*1024 // 100M
 		let storageNum=0
 		let computes=(list)=>{
+			if(!list)return
 			list.length>0&&list.forEach(item=>{
 				if(item.fileSize){
 					storageNum=storageNum+item.fileSize
@@ -101,8 +117,8 @@ export default class Api {
 		computes(filelist)
 		return {
 			userStorageNum:storageNum, // 用户存储量
-			uploadMaxStorageNum:20*1024*1024, // 最大上传量
-			systemStorageNum:maxStorage, // 系统存储量
+			uploadMaxStorageNum:window.config.uploadfileConfig.uploadMaxStorageNum, // 最大上传量
+			systemStorageNum:window.config.uploadfileConfig.maxStorage, // 系统存储量
 		}
 	}
 	// 检测是否满足存储
