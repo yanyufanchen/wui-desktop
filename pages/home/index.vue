@@ -125,9 +125,11 @@
 <style lang="less" scoped>
 	uni-page-body {
 		height: 100%;
+		overflow: hidden;
 	}
 
 	.loading {
+		overflow: hidden;
 		width: 100%;
 		height: 100vh;
 

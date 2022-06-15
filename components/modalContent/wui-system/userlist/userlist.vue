@@ -36,10 +36,10 @@
 			</el-table-column>
 		</el-table>
 
-		<el-dialog :title="userType==='add'?'添加用户':'编辑用户'" :visible.sync="adduserVisible" width="40%">
-			<el-form :model="userfrom" :rules="userRules" ref="userfrom" label-width="100px">
+		<el-dialog :title="userType==='add'?'添加用户':'编辑用户'" :visible.sync="adduserVisible" width="40%" :show-close="false">
+			<el-form :model="userfrom" :rules="userRules" ref="userfrom" label-width="100px" >
 				<el-form-item label="用户名" prop="username">
-					<el-input style="width:100%;margin-bottom:5px" v-model="userfrom.username" placeholder="请输入用户名">
+					<el-input style="width:100%;margin-bottom:5px" :disabled="userType==='add'?false:true" v-model="userfrom.username" placeholder="请输入用户名">
 					</el-input>
 				</el-form-item>
 				<el-form-item label="密码" prop="newPassword">
@@ -95,9 +95,9 @@
 							trigger: 'blur'
 						},
 						{
-							min: 6,
+							min: 5,
 							max: 12,
-							message: '长度在 6 到 12 个字符',
+							message: '长度在 5 到 12 个字符',
 							trigger: 'blur'
 						}
 					],
